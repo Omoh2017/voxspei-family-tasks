@@ -4,77 +4,215 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoxSpei - Family Tasks & Rewards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --primary-blue: #3B82F6;
+            --primary-blue-light: #60A5FA;
+            --primary-blue-dark: #1D4ED8;
+            --accent-blue: #1E40AF;
+            --background: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --border: #E2E8F0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile-first responsive design */
         .app-container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 100vw;
+            min-height: 100vh;
+            background: var(--card-bg);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Desktop optimization */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            }
+            
+            .app-container {
+                max-width: 440px;
+                margin: 0 auto;
+                border-radius: 24px;
+                box-shadow: var(--shadow-lg);
+                min-height: calc(100vh - 40px);
+            }
         }
 
         .header {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 32px 24px 28px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><path d="M0,0v46c55.3,0,100,44.7,100,100h800c0-55.3,44.7-100,100-100V0H0z"/></svg>');
+            background-size: cover;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
 
         .header p {
-            opacity: 0.9;
-            font-size: 14px;
+            opacity: 0.95;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .family-illustration {
+            margin: 24px 0 16px;
+            font-size: 48px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
         .content {
-            padding: 30px 20px;
+            padding: 32px 24px 24px;
+            flex: 1;
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 32px 24px;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border-radius: 16px;
+            margin-bottom: 32px;
+            border: 1px solid #BAE6FD;
+        }
+
+        .welcome-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primary-blue-dark);
+        }
+
+        .welcome-section p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.4;
         }
 
         .tab-buttons {
-            display: flex;
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 5px;
-            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #F1F5F9;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+            gap: 4px;
         }
 
         .tab-button {
-            flex: 1;
-            padding: 12px;
+            padding: 12px 16px;
             border: none;
             background: transparent;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
         }
 
         .tab-button.active {
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            color: #4ECDC4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: var(--primary-blue);
+            font-weight: 600;
         }
 
         .tab-content {
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
             display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
@@ -85,38 +223,64 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333;
+            font-size: 14px;
+            color: var(--text-primary);
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.2s ease;
+            background: white;
+            color: var(--text-primary);
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #4ECDC4;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn:disabled {
@@ -125,121 +289,335 @@
             transform: none;
         }
 
+        .btn.loading {
+            pointer-events: none;
+        }
+
+        .btn.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .alert {
-            padding: 15px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             margin-bottom: 20px;
             font-weight: 500;
+            font-size: 14px;
+            border: 1px solid;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #ECFDF5;
+            color: #065F46;
+            border-color: #A7F3D0;
         }
 
         .alert.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .task-list {
-            margin-top: 20px;
+            background: #FEF2F2;
+            color: #991B1B;
+            border-color: #FECACA;
         }
 
         .task-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid #4ECDC4;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-blue);
+        }
+
+        .task-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
         }
 
         .task-title {
             font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .task-reward {
-            color: #28a745;
-            font-weight: 500;
+            color: var(--success);
+            font-weight: 600;
             font-size: 14px;
+            background: #ECFDF5;
+            padding: 4px 8px;
+            border-radius: 6px;
         }
 
         .task-status {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
             font-size: 12px;
-            font-weight: 500;
-            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .status-assigned { background: #fff3cd; color: #856404; }
-        .status-completed { background: #cce5ff; color: #004085; }
-        .status-approved { background: #d4edda; color: #155724; }
+        .status-assigned { 
+            background: #FEF3C7; 
+            color: #92400E; 
+        }
+        .status-completed { 
+            background: #DBEAFE; 
+            color: #1E40AF; 
+        }
+        .status-approved { 
+            background: #D1FAE5; 
+            color: #065F46; 
+        }
 
         .balance-card {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 24px;
+            border-radius: 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="white" opacity="0.1"><circle cx="50" cy="50" r="40"/></svg>');
+            background-size: 120px;
+            background-position: top right;
+            background-repeat: no-repeat;
+        }
+
+        .balance-content {
+            position: relative;
+            z-index: 1;
         }
 
         .balance-amount {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 500;
         }
 
         .user-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: var(--error);
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #666;
+            padding: 40px 20px;
+            color: var(--text-secondary);
         }
 
-        .hidden { display: none; }
+        .loading::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 8px;
+        }
 
-        .welcome-section {
+        .hidden { 
+            display: none !important; 
+        }
+
+        .empty-state {
             text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 40px 20px;
+            color: var(--text-secondary);
         }
 
-        .feature-list {
-            text-align: left;
-            margin: 15px 0;
+        .empty-state .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
         }
 
-        .feature-list li {
-            margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
         }
 
-        .feature-list li:before {
-            content: "✅";
-            position: absolute;
-            left: 0;
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
         }
 
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 24px 0 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        /* Improved mobile responsiveness */
         @media (max-width: 480px) {
-            .app-container {
-                margin: 0;
-                border-radius: 0;
-                min-height: 100vh;
+            .content {
+                padding: 24px 16px 16px;
+            }
+            
+            .header {
+                padding: 24px 16px 20px;
+            }
+            
+            .family-illustration {
+                font-size: 40px;
+                margin: 16px 0 12px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .balance-amount {
+                font-size: 28px;
+            }
+        }
+
+        /* Performance optimizations */
+        .app-container {
+            contain: layout style paint;
+        }
+
+        .tab-content {
+            contain: layout;
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -247,22 +625,37 @@
 <body>
     <div class="app-container">
         <div class="header">
-            <h1>🏠 VoxSpei</h1>
-            <p>Family Tasks & Rewards</p>
+            <div class="header-content">
+                <h1>🏠 VoxSpei</h1>
+                <p>Family Tasks & Rewards</p>
+                <div class="family-illustration">👨‍🦱👩‍🦱👧🏽👦🏽👶🏽</div>
+            </div>
         </div>
 
         <div class="content">
             <!-- Welcome Section -->
             <div class="welcome-section">
                 <h2>Welcome to VoxSpei! 👨‍👩‍👧‍👦</h2>
-                <p>Manage family tasks and reward your children's hard work!</p>
+                <p>Transform chores into fun family achievements with our smart task management system!</p>
                 
-                <ul class="feature-list">
-                    <li>Parents assign tasks to children</li>
-                    <li>Kids earn rewards for completion</li>
-                    <li>Track progress and manage allowances</li>
-                    <li>Build positive family habits</li>
-                </ul>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="feature-icon">📋</span>
+                        <div class="feature-text">Assign Tasks</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🏆</span>
+                        <div class="feature-text">Earn Rewards</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <div class="feature-text">Track Progress</div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">💪</span>
+                        <div class="feature-text">Build Habits</div>
+                    </div>
+                </div>
                 
                 <p><strong>Get started by creating your family account below!</strong></p>
             </div>
@@ -277,31 +670,35 @@
                 <!-- Login Tab -->
                 <div id="loginTab" class="tab-content active">
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="loginEmail" placeholder="Enter your email">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email address" autocomplete="email">
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
                     </div>
-                    <button class="btn" onclick="login()">Login to Your Family</button>
+                    <button class="btn" onclick="login()" id="loginBtn">
+                        Login to Your Family
+                    </button>
                 </div>
 
                 <!-- Signup Tab -->
                 <div id="signupTab" class="tab-content">
                     <div class="form-group">
-                        <label>Your Name</label>
-                        <input type="text" id="signupName" placeholder="Enter your full name">
+                        <label>Your Full Name</label>
+                        <input type="text" id="signupName" placeholder="Enter your full name" autocomplete="name">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="signupEmail" placeholder="Enter your email">
+                        <label>Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email address" autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="signupPassword" placeholder="Create a password">
+                        <label>Create Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a secure password" autocomplete="new-password">
                     </div>
-                    <button class="btn" onclick="signup()">Create Family Account</button>
+                    <button class="btn" onclick="signup()" id="signupBtn">
+                        Create Family Account
+                    </button>
                 </div>
 
                 <div id="authMessage"></div>
@@ -310,9 +707,11 @@
             <!-- App Section (Hidden by default) -->
             <div id="appSection" class="hidden">
                 <div class="user-info">
-                    <div>Welcome, <strong id="userName"></strong>!</div>
-                    <div style="font-size: 14px; color: #666; margin-top: 5px;" id="userRole"></div>
-                    <button onclick="logout()" style="float: right; background: none; border: none; color: #666; cursor: pointer;">Logout</button>
+                    <div class="user-details">
+                        <h3 id="userName">Welcome!</h3>
+                        <div class="user-role" id="userRole">Parent</div>
+                    </div>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
                 </div>
 
                 <!-- Parent View -->
@@ -325,63 +724,77 @@
 
                     <!-- Children Tab -->
                     <div id="childrenTab" class="tab-content active">
-                        <h3>👨‍👩‍👧‍👦 Add Child</h3>
+                        <div class="section-title">
+                            👨‍👩‍👧‍👦 Add Child to Family
+                        </div>
                         <div class="form-group">
                             <label>Child's Name</label>
                             <input type="text" id="childName" placeholder="Enter child's name">
                         </div>
                         <div class="form-group">
-                            <label>Child's PIN</label>
-                            <input type="text" id="childPin" placeholder="4-digit PIN" maxlength="4" value="1234">
+                            <label>Child's PIN (4 digits)</label>
+                            <input type="text" id="childPin" placeholder="Create a 4-digit PIN" maxlength="4" value="1234">
                         </div>
-                        <button class="btn" onclick="addChild()">Add Child to Family</button>
+                        <button class="btn" onclick="addChild()" id="addChildBtn">
+                            Add Child to Family
+                        </button>
                         
                         <div id="childrenList"></div>
                     </div>
 
                     <!-- Tasks Tab -->
                     <div id="tasksTab" class="tab-content">
-                        <h3>📋 Create Task</h3>
+                        <div class="section-title">
+                            📋 Create New Task
+                        </div>
                         <div class="form-group">
                             <label>Task Title</label>
                             <input type="text" id="taskTitle" placeholder="e.g., Clean your room">
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <input type="text" id="taskDescription" placeholder="Task details">
+                            <label>Task Description</label>
+                            <input type="text" id="taskDescription" placeholder="Detailed instructions">
                         </div>
                         <div class="form-group">
                             <label>Reward Amount (₦)</label>
                             <input type="number" id="taskReward" placeholder="100" min="1" value="100">
                         </div>
                         <div class="form-group">
-                            <label>Frequency</label>
+                            <label>Task Frequency</label>
                             <select id="taskFrequency">
-                                <option value="once">One Time</option>
-                                <option value="daily">Daily</option>
-                                <option value="weekly">Weekly</option>
+                                <option value="once">One Time Task</option>
+                                <option value="daily">Daily Task</option>
+                                <option value="weekly">Weekly Task</option>
                             </select>
                         </div>
-                        <button class="btn" onclick="createTask()">Create Task</button>
+                        <button class="btn" onclick="createTask()" id="createTaskBtn">
+                            Create Task
+                        </button>
                         
                         <div id="tasksList"></div>
                     </div>
 
                     <!-- Dashboard Tab -->
                     <div id="dashboardTab" class="tab-content">
-                        <h3>📊 Family Dashboard</h3>
-                        <div id="dashboardContent" class="loading">Loading dashboard...</div>
+                        <div class="section-title">
+                            📊 Family Dashboard
+                        </div>
+                        <div id="dashboardContent" class="loading">Loading your family dashboard...</div>
                     </div>
                 </div>
 
                 <!-- Child View -->
                 <div id="childView" class="hidden">
                     <div class="balance-card">
-                        <div class="balance-amount">₦<span id="childBalance">0</span></div>
-                        <div>Your Rewards Balance</div>
+                        <div class="balance-content">
+                            <div class="balance-amount">₦<span id="childBalance">0</span></div>
+                            <div class="balance-label">Your Rewards Balance</div>
+                        </div>
                     </div>
 
-                    <h3>📋 My Tasks</h3>
+                    <div class="section-title">
+                        📋 My Tasks Today
+                    </div>
                     <div id="childTasks" class="loading">Loading your tasks...</div>
                 </div>
 
@@ -390,28 +803,109 @@
         </div>
     </div>
 
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="notification-toast"></div>
+
     <script>
         const API_URL = 'https://voxspei-family-tasks.onrender.com';
         let currentUser = null;
         let authToken = null;
         let children = [];
 
-        // Tab Management
+        // Performance optimization: Cache DOM elements
+        const elements = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cache frequently used elements
+            elements.authSection = document.getElementById('authSection');
+            elements.appSection = document.getElementById('appSection');
+            elements.userName = document.getElementById('userName');
+            elements.userRole = document.getElementById('userRole');
+            elements.childBalance = document.getElementById('childBalance');
+            
+            // Check for saved session
+            const savedToken = localStorage.getItem('voxspei_token');
+            const savedUser = localStorage.getItem('voxspei_user');
+            
+            if (savedToken && savedUser) {
+                try {
+                    authToken = savedToken;
+                    currentUser = JSON.parse(savedUser);
+                    showApp();
+                } catch (error) {
+                    // Clear invalid data
+                    localStorage.removeItem('voxspei_token');
+                    localStorage.removeItem('voxspei_user');
+                }
+            }
+            
+            console.log('VoxSpei Family Tasks App Loaded! 🚀');
+        });
+
+        // Session persistence
+        function saveSession() {
+            if (authToken && currentUser) {
+                localStorage.setItem('voxspei_token', authToken);
+                localStorage.setItem('voxspei_user', JSON.stringify(currentUser));
+            }
+        }
+
+        function clearSession() {
+            localStorage.removeItem('voxspei_token');
+            localStorage.removeItem('voxspei_user');
+        }
+
+        // Improved notification system
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById('notificationToast');
+            toast.textContent = message;
+            toast.className = `notification-toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Loading states for buttons
+        function setButtonLoading(buttonId, loading = true) {
+            const btn = document.getElementById(buttonId);
+            if (!btn) return;
+            
+            if (loading) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = 'Please wait...';
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                btn.textContent = btn.dataset.originalText || btn.textContent;
+            }
+        }
+
+        // Tab Management with improved performance
         function switchTab(tabName) {
-            document.querySelectorAll('#authSection .tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('#authSection .tab-content').forEach(content => content.classList.remove('active'));
+            const authButtons = document.querySelectorAll('#authSection .tab-button');
+            const authContents = document.querySelectorAll('#authSection .tab-content');
+            
+            authButtons.forEach(btn => btn.classList.remove('active'));
+            authContents.forEach(content => content.classList.remove('active'));
             
             event.target.classList.add('active');
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
         function switchAppTab(tabName) {
-            document.querySelectorAll('#appSection .tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('#appSection .tab-content').forEach(content => content.classList.remove('active'));
+            const appButtons = document.querySelectorAll('#appSection .tab-button');
+            const appContents = document.querySelectorAll('#appSection .tab-content');
+            
+            appButtons.forEach(btn => btn.classList.remove('active'));
+            appContents.forEach(content => content.classList.remove('active'));
             
             event.target.classList.add('active');
             document.getElementById(tabName + 'Tab').classList.add('active');
             
+            // Load data when tab is switched
             if (tabName === 'dashboard') {
                 loadDashboard();
             } else if (tabName === 'children') {
@@ -421,16 +915,23 @@
             }
         }
 
-        // Authentication
+        // Enhanced Authentication with better error handling
         async function signup() {
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
 
             if (!name || !email || !password) {
-                showMessage('authMessage', 'Please fill all fields', 'error');
+                showMessage('authMessage', 'Please fill in all fields', 'error');
                 return;
             }
+
+            if (password.length < 6) {
+                showMessage('authMessage', 'Password must be at least 6 characters long', 'error');
+                return;
+            }
+
+            setButtonLoading('signupBtn', true);
 
             try {
                 const response = await fetch(`${API_URL}/auth/signup`, {
@@ -442,25 +943,35 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('authMessage', 'Account created successfully! Please login.', 'success');
+                    showNotification('Account created successfully! 🎉');
+                    showMessage('authMessage', 'Account created! Please login below.', 'success');
                     switchTab('login');
                     document.getElementById('loginEmail').value = email;
+                    
+                    // Clear signup form
+                    document.getElementById('signupName').value = '';
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupPassword').value = '';
                 } else {
-                    showMessage('authMessage', data.error, 'error');
+                    showMessage('authMessage', data.error || 'Failed to create account', 'error');
                 }
             } catch (error) {
-                showMessage('authMessage', 'Network error. Please try again.', 'error');
+                showMessage('authMessage', 'Connection error. Please check your internet and try again.', 'error');
+            } finally {
+                setButtonLoading('signupBtn', false);
             }
         }
 
         async function login() {
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
             if (!email || !password) {
-                showMessage('authMessage', 'Please enter email and password', 'error');
+                showMessage('authMessage', 'Please enter your email and password', 'error');
                 return;
             }
+
+            setButtonLoading('loginBtn', true);
 
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
@@ -474,12 +985,16 @@
                 if (response.ok) {
                     currentUser = data.user;
                     authToken = data.token;
+                    saveSession();
+                    showNotification(`Welcome back, ${data.user.name}! 👋`);
                     showApp();
                 } else {
-                    showMessage('authMessage', data.error, 'error');
+                    showMessage('authMessage', data.error || 'Invalid login credentials', 'error');
                 }
             } catch (error) {
-                showMessage('authMessage', 'Network error. Please try again.', 'error');
+                showMessage('authMessage', 'Connection error. Please check your internet and try again.', 'error');
+            } finally {
+                setButtonLoading('loginBtn', false);
             }
         }
 
@@ -487,16 +1002,20 @@
             currentUser = null;
             authToken = null;
             children = [];
-            document.getElementById('authSection').classList.remove('hidden');
-            document.getElementById('appSection').classList.add('hidden');
+            clearSession();
+            
+            elements.authSection.classList.remove('hidden');
+            elements.appSection.classList.add('hidden');
             document.getElementById('authMessage').innerHTML = '';
+            
+            showNotification('Logged out successfully', 'success');
         }
 
         function showApp() {
-            document.getElementById('authSection').classList.add('hidden');
-            document.getElementById('appSection').classList.remove('hidden');
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userRole').textContent = `Role: ${currentUser.role}`;
+            elements.authSection.classList.add('hidden');
+            elements.appSection.classList.remove('hidden');
+            elements.userName.textContent = currentUser.name;
+            elements.userRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
 
             if (currentUser.role === 'parent') {
                 document.getElementById('parentView').classList.remove('hidden');
@@ -510,15 +1029,22 @@
             }
         }
 
-        // Parent Functions
+        // Enhanced Parent Functions with better UX
         async function addChild() {
-            const name = document.getElementById('childName').value;
-            const pin = document.getElementById('childPin').value;
+            const name = document.getElementById('childName').value.trim();
+            const pin = document.getElementById('childPin').value.trim();
 
-            if (!name || !pin) {
-                showMessage('appMessage', 'Please enter child name and PIN', 'error');
+            if (!name) {
+                showMessage('appMessage', 'Please enter the child\'s name', 'error');
                 return;
             }
+
+            if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+                showMessage('appMessage', 'Please enter a 4-digit PIN for the child', 'error');
+                return;
+            }
+
+            setButtonLoading('addChildBtn', true);
 
             try {
                 const response = await fetch(`${API_URL}/parents/${currentUser.id}/invite-child`, {
@@ -533,16 +1059,28 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('appMessage', `${name} added successfully!`, 'success');
+                    showNotification(`${name} added to your family! 👨‍👩‍👧‍👦`);
+                    showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
+                    
+                    // Clear form
                     document.getElementById('childName').value = '';
                     document.getElementById('childPin').value = '1234';
+                    
+                    // Add to children array
                     children.push(data.child);
                     updateChildrenDisplay();
+                    
                 } else {
-                    showMessage('appMessage', data.error, 'error');
+                    if (data.error && data.error.includes('route not found')) {
+                        showMessage('appMessage', 'Feature temporarily unavailable. Please try again later.', 'error');
+                    } else {
+                        showMessage('appMessage', data.error || 'Failed to add child', 'error');
+                    }
                 }
             } catch (error) {
-                showMessage('appMessage', 'Network error. Please try again.', 'error');
+                showMessage('appMessage', 'Connection error. Please check your internet and try again.', 'error');
+            } finally {
+                setButtonLoading('addChildBtn', false);
             }
         }
 
@@ -552,18 +1090,30 @@
 
         function updateChildrenDisplay() {
             const container = document.getElementById('childrenList');
+            
             if (children.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; margin-top: 20px;">No children added yet. Add your first child above!</p>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="emoji">👶</span>
+                        <h3>No children added yet</h3>
+                        <p>Add your first child to get started with family task management!</p>
+                    </div>
+                `;
                 return;
             }
 
             container.innerHTML = `
-                <h4 style="margin-top: 30px; margin-bottom: 15px;">Your Children:</h4>
+                <div class="section-title">👨‍👩‍👧‍👦 Your Family</div>
                 ${children.map(child => `
                     <div class="task-item">
                         <div class="task-title">${child.name}</div>
-                        <div style="font-size: 14px; color: #666;">PIN: ****</div>
-                        <div style="font-size: 12px; color: #28a745; margin-top: 5px;">✅ Active</div>
+                        <div class="task-description">Family member • PIN protected</div>
+                        <div class="task-meta">
+                            <div class="task-status status-approved">Active</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">
+                                Added ${new Date(child.created_at || Date.now()).toLocaleDateString()}
+                            </div>
+                        </div>
                     </div>
                 `).join('')}
             `;
@@ -571,21 +1121,28 @@
 
         async function createTask() {
             if (children.length === 0) {
-                showMessage('appMessage', 'Please add a child first before creating tasks!', 'error');
+                showMessage('appMessage', 'Please add a child to your family first before creating tasks!', 'error');
                 return;
             }
 
-            const title = document.getElementById('taskTitle').value;
-            const description = document.getElementById('taskDescription').value;
+            const title = document.getElementById('taskTitle').value.trim();
+            const description = document.getElementById('taskDescription').value.trim();
             const reward = document.getElementById('taskReward').value;
             const frequency = document.getElementById('taskFrequency').value;
 
-            if (!title || !reward) {
-                showMessage('appMessage', 'Please fill in task title and reward amount', 'error');
+            if (!title) {
+                showMessage('appMessage', 'Please enter a task title', 'error');
                 return;
             }
 
-            // Use the first child for now (in a real app, you'd let parents select)
+            if (!reward || reward < 1) {
+                showMessage('appMessage', 'Please enter a valid reward amount', 'error');
+                return;
+            }
+
+            setButtonLoading('createTaskBtn', true);
+
+            // Use the first child for now (in a full app, you'd let parents select)
             const childId = children[0].id;
 
             try {
@@ -598,7 +1155,7 @@
                     body: JSON.stringify({
                         child_id: childId,
                         title,
-                        description,
+                        description: description || 'No additional details',
                         value_amount: parseInt(reward),
                         repeat: frequency
                     })
@@ -607,17 +1164,23 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('appMessage', 'Task created successfully!', 'success');
+                    showNotification('Task created successfully! 📋');
+                    showMessage('appMessage', `Task "${title}" created successfully!`, 'success');
+                    
                     // Clear form
                     document.getElementById('taskTitle').value = '';
                     document.getElementById('taskDescription').value = '';
                     document.getElementById('taskReward').value = '100';
+                    document.getElementById('taskFrequency').value = 'once';
+                    
                     loadTasks();
                 } else {
-                    showMessage('appMessage', data.error, 'error');
+                    showMessage('appMessage', data.error || 'Failed to create task', 'error');
                 }
             } catch (error) {
-                showMessage('appMessage', 'Network error. Please try again.', 'error');
+                showMessage('appMessage', 'Connection error. Please check your internet and try again.', 'error');
+            } finally {
+                setButtonLoading('createTaskBtn', false);
             }
         }
 
@@ -630,7 +1193,15 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    displayTasks(data.tasks);
+                    displayTasks(data.tasks || []);
+                } else {
+                    document.getElementById('tasksList').innerHTML = `
+                        <div class="empty-state">
+                            <span class="emoji">⚠️</span>
+                            <h3>Unable to load tasks</h3>
+                            <p>Please try refreshing the page</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
                 console.error('Error loading tasks:', error);
@@ -639,19 +1210,31 @@
 
         function displayTasks(tasks) {
             const container = document.getElementById('tasksList');
+            
             if (tasks.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; margin-top: 20px;">No tasks created yet. Create your first task above!</p>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="emoji">📋</span>
+                        <h3>No tasks created yet</h3>
+                        <p>Create your first task above to get started!</p>
+                    </div>
+                `;
                 return;
             }
 
             container.innerHTML = `
-                <h4 style="margin-top: 30px; margin-bottom: 15px;">Recent Tasks:</h4>
+                <div class="section-title">📋 Recent Tasks</div>
                 ${tasks.map(task => `
                     <div class="task-item">
                         <div class="task-title">${task.title}</div>
-                        <div style="font-size: 14px; color: #666; margin: 5px 0;">${task.description || 'No description'}</div>
-                        <div class="task-reward">Reward: ₦${task.value_amount}</div>
-                        <div class="task-status status-${task.status}">${task.status.toUpperCase()}</div>
+                        <div class="task-description">${task.description || 'No description provided'}</div>
+                        <div class="task-meta">
+                            <div class="task-reward">₦${task.value_amount}</div>
+                            <div class="task-status status-${task.status}">${task.status}</div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                            Created ${new Date(task.created_at || Date.now()).toLocaleDateString()}
+                        </div>
                     </div>
                 `).join('')}
             `;
@@ -667,37 +1250,71 @@
 
                 if (response.ok) {
                     displayDashboard(data.dashboard);
+                } else {
+                    document.getElementById('dashboardContent').innerHTML = `
+                        <div class="empty-state">
+                            <span class="emoji">⚠️</span>
+                            <h3>Unable to load dashboard</h3>
+                            <p>Please try refreshing the page</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                document.getElementById('dashboardContent').innerHTML = 'Error loading dashboard';
+                document.getElementById('dashboardContent').innerHTML = `
+                    <div class="empty-state">
+                        <span class="emoji">📊</span>
+                        <h3>Dashboard temporarily unavailable</h3>
+                        <p>Please check your connection and try again</p>
+                    </div>
+                `;
             }
         }
 
         function displayDashboard(dashboard) {
+            const summary = dashboard.summary || {};
+            
             document.getElementById('dashboardContent').innerHTML = `
                 <div class="balance-card">
-                    <div style="font-size: 18px; margin-bottom: 15px;">📊 Family Overview</div>
-                    <div style="font-size: 14px; line-height: 1.6;">
-                        👨‍👩‍👧‍👦 Children: ${dashboard.summary.total_children}<br>
-                        📋 Total Tasks: ${dashboard.summary.total_tasks}<br>
-                        💰 Rewards Given: ₦${dashboard.summary.total_rewards_distributed || 0}<br>
-                        ⏳ Pending Approvals: ${dashboard.summary.pending_approvals || 0}
+                    <div class="balance-content">
+                        <div style="font-size: 20px; margin-bottom: 16px;">📊 Family Overview</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                            <div>
+                                <div style="opacity: 0.9;">Children</div>
+                                <div style="font-size: 24px; font-weight: 700;">${summary.total_children || 0}</div>
+                            </div>
+                            <div>
+                                <div style="opacity: 0.9;">Tasks</div>
+                                <div style="font-size: 24px; font-weight: 700;">${summary.total_tasks || 0}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="opacity: 0.9; font-size: 14px;">Total Rewards Given</div>
+                            <div style="font-size: 24px; font-weight: 700;">₦${summary.total_rewards_distributed || 0}</div>
+                        </div>
                     </div>
                 </div>
                 
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px;">
-                    <h4>🎯 Getting Started Tips:</h4>
-                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.6;">
-                        <li>Add all your children first</li>
-                        <li>Create simple daily tasks to start</li>
-                        <li>Set reasonable reward amounts</li>
+                <div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #BAE6FD;">
+                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">🎯 Getting Started Tips</h3>
+                    <ul style="margin: 0; padding-left: 20px; line-height: 1.8; color: var(--text-primary);">
+                        <li>Add all your children to the family first</li>
+                        <li>Start with simple daily tasks like "Make your bed"</li>
+                        <li>Set reasonable reward amounts (₦50-200)</li>
                         <li>Check back regularly to approve completed tasks</li>
+                        <li>Celebrate achievements to keep kids motivated!</li>
                     </ul>
                 </div>
+                
+                ${summary.total_children === 0 ? `
+                    <div style="background: #FEF3C7; padding: 16px; border-radius: 12px; margin-top: 16px; border: 1px solid #FCD34D;">
+                        <div style="color: #92400E; font-weight: 600; margin-bottom: 8px;">👶 Add Your First Child</div>
+                        <div style="color: #92400E; font-size: 14px;">Go to the "Children" tab to add your first family member and start creating tasks!</div>
+                    </div>
+                ` : ''}
             `;
         }
 
-        // Child Functions
+        // Enhanced Child Functions
         async function loadChildTasks() {
             try {
                 const response = await fetch(`${API_URL}/children/${currentUser.id}/tasks`, {
@@ -707,29 +1324,69 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    displayChildTasks(data.tasks);
+                    displayChildTasks(data.tasks || []);
+                } else {
+                    document.getElementById('childTasks').innerHTML = `
+                        <div class="empty-state">
+                            <span class="emoji">📋</span>
+                            <h3>No tasks yet</h3>
+                            <p>Ask your parents to create some tasks for you!</p>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                document.getElementById('childTasks').innerHTML = 'Error loading tasks';
+                document.getElementById('childTasks').innerHTML = `
+                    <div class="empty-state">
+                        <span class="emoji">⚠️</span>
+                        <h3>Unable to load tasks</h3>
+                        <p>Please try refreshing the page</p>
+                    </div>
+                `;
             }
         }
 
         function displayChildTasks(tasks) {
             const container = document.getElementById('childTasks');
+            
             if (tasks.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No tasks assigned yet. Ask your parents to create some tasks for you!</p>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="emoji">🎯</span>
+                        <h3>No tasks assigned yet</h3>
+                        <p>Your parents haven't created any tasks for you yet. Check back soon!</p>
+                    </div>
+                `;
                 return;
             }
 
             container.innerHTML = tasks.map(task => `
                 <div class="task-item">
                     <div class="task-title">${task.title}</div>
-                    <div style="font-size: 14px; color: #666; margin: 5px 0;">${task.description || ''}</div>
-                    <div class="task-reward">Reward: ₦${task.value_amount}</div>
-                    <div class="task-status status-${task.status}">${task.status.toUpperCase()}</div>
-                    ${task.status === 'assigned' ? '<button class="btn" style="margin-top: 10px; font-size: 14px; padding: 10px;" onclick="completeTask(\'' + task.id + '\')">✅ Mark Complete</button>' : ''}
+                    <div class="task-description">${task.description || 'No additional details'}</div>
+                    <div class="task-meta">
+                        <div class="task-reward">₦${task.value_amount}</div>
+                        <div class="task-status status-${task.status}">${task.status}</div>
+                    </div>
+                    ${task.status === 'assigned' ? `
+                        <button class="btn" style="margin-top: 12px; font-size: 14px; padding: 12px;" onclick="completeTask('${task.id}')">
+                            ✅ Mark Complete
+                        </button>
+                    ` : task.status === 'completed' ? `
+                        <div style="margin-top: 12px; padding: 8px; background: #DBEAFE; border-radius: 8px; color: #1E40AF; font-size: 14px; text-align: center;">
+                            ⏳ Waiting for parent approval
+                        </div>
+                    ` : `
+                        <div style="margin-top: 12px; padding: 8px; background: #D1FAE5; border-radius: 8px; color: #065F46; font-size: 14px; text-align: center;">
+                            🎉 Completed! Reward earned
+                        </div>
+                    `}
                 </div>
             `).join('');
+        }
+
+        async function completeTask(taskId) {
+            // This would need the task occurrence ID in a real implementation
+            showNotification('Task completion feature coming soon! 🚧');
         }
 
         async function loadChildBalance() {
@@ -741,26 +1398,109 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('childBalance').textContent = data.summary.total_balance || 0;
+                    elements.childBalance.textContent = data.summary?.total_balance || 0;
+                } else {
+                    elements.childBalance.textContent = '0';
                 }
             } catch (error) {
                 console.error('Error loading balance:', error);
+                elements.childBalance.textContent = '0';
             }
         }
 
-        // Utility Functions
+        // Enhanced Utility Functions
         function showMessage(elementId, message, type) {
             const element = document.getElementById(elementId);
+            if (!element) return;
+            
             element.innerHTML = `<div class="alert ${type}">${message}</div>`;
-            setTimeout(() => {
-                element.innerHTML = '';
-            }, 5000);
+            
+            // Auto-clear success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    element.innerHTML = '';
+                }, 5000);
+            }
         }
 
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('VoxSpei Family Tasks App Loaded and Ready! 🚀');
+        // Performance monitoring
+        let performanceMetrics = {
+            apiCalls: 0,
+            errors: 0,
+            loadTime: Date.now()
+        };
+
+        // Enhanced error handling with retry logic
+        async function fetchWithRetry(url, options, retries = 2) {
+            performanceMetrics.apiCalls++;
+            
+            for (let i = 0; i <= retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    return response;
+                } catch (error) {
+                    if (i === retries) {
+                        performanceMetrics.errors++;
+                        throw error;
+                    }
+                    // Wait before retry
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+                }
+            }
+        }
+
+        // Keyboard shortcuts for better UX
+        document.addEventListener('keydown', function(e) {
+            // Enter key to submit forms
+            if (e.key === 'Enter') {
+                if (document.activeElement.tagName === 'INPUT') {
+                    const form = document.activeElement.closest('#loginTab, #signupTab');
+                    if (form) {
+                        if (form.id === 'loginTab') {
+                            login();
+                        } else if (form.id === 'signupTab') {
+                            signup();
+                        }
+                    }
+                }
+            }
         });
+
+        // Improved accessibility
+        function addAccessibilityFeatures() {
+            // Add ARIA labels
+            document.querySelectorAll('.btn').forEach(btn => {
+                if (!btn.getAttribute('aria-label')) {
+                    btn.setAttribute('aria-label', btn.textContent);
+                }
+            });
+
+            // Add focus management
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                        const buttons = Array.from(btn.parentElement.children);
+                        const currentIndex = buttons.indexOf(btn);
+                        const nextIndex = e.key === 'ArrowRight' 
+                            ? (currentIndex + 1) % buttons.length
+                            : (currentIndex - 1 + buttons.length) % buttons.length;
+                        buttons[nextIndex].focus();
+                        buttons[nextIndex].click();
+                    }
+                });
+            });
+        }
+
+        // Initialize accessibility features when DOM is ready
+        document.addEventListener('DOMContentLoaded', addAccessibilityFeatures);
+
+        // Service worker for offline support (optional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // Register service worker for offline functionality
+                // This would need a separate service worker file
+            });
+        }
     </script>
 </body>
 </html>
