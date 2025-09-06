@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxSpei - Family Tasks & Rewards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            color: #4ECDC4;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .task-list {
+            margin-top: 20px;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4ECDC4;
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .task-reward {
+            color: #28a745;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .status-assigned { background: #fff3cd; color: #856404; }
+        .status-completed { background: #cce5ff; color: #004085; }
+        .status-approved { background: #d4edda; color: #155724; }
+
+        .balance-card {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .hidden { display: none; }
+
+        .welcome-section {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            text-align: left;
+            margin: 15px 0;
+        }
+
+        .feature-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🏠 VoxSpei</h1>
+            <p>Family Tasks & Rewards</p>
+        </div>
+
+        <div class="content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2>Welcome to VoxSpei! 👨‍👩‍👧‍👦</h2>
+                <p>Manage family tasks and reward your children's hard work!</p>
+                
+                <ul class="feature-list">
+                    <li>Parents assign tasks to children</li>
+                    <li>Kids earn rewards for completion</li>
+                    <li>Track progress and manage allowances</li>
+                    <li>Build positive family habits</li>
+                </ul>
+                
+                <p><strong>Get started by creating your family account below!</strong></p>
+            </div>
+
+            <!-- Login/Signup Section -->
+            <div id="authSection">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('login')">Login</button>
+                    <button class="tab-button" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+
+                <!-- Login Tab -->
+                <div id="loginTab" class="tab-content active">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                    </div>
+                    <button class="btn" onclick="login()">Login to Your Family</button>
+                </div>
+
+                <!-- Signup Tab -->
+                <div id="signupTab" class="tab-content">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="signupName" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a password">
+                    </div>
+                    <button class="btn" onclick="signup()">Create Family Account</button>
+                </div>
+
+                <div id="authMessage"></div>
+            </div>
+
+            <!-- App Section (Hidden by default) -->
+            <div id="appSection" class="hidden">
+                <div class="user-info">
+                    <div>Welcome, <strong id="userName"></strong>!</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;" id="userRole"></div>
+                    <button onclick="logout()" style="float: right; background: none; border: none; color: #666; cursor: pointer;">Logout</button>
+                </div>
+
+                <!-- Parent View -->
+                <div id="parentView" class="hidden">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="switchAppTab('children')">Children</button>
+                        <button class="tab-button" onclick="switchAppTab('tasks')">Tasks</button>
+                        <button class="tab-button" onclick="switchAppTab('dashboard')">Dashboard</button>
+                    </div>
+
+                    <!-- Children Tab -->
+                    <div id="childrenTab" class="tab-content active">
+                        <h3>👨‍👩‍👧‍👦 Add Child</h3>
+                        <div class="form-group">
+                            <label>Child's Name</label>
+                            <input type="text" id="childName" placeholder="Enter child's name">
+                        </div>
+                        <div class="form-group">
+                            <label>Child's PIN</label>
+                            <input type="text" id="childPin" placeholder="4-digit PIN" maxlength="4" value="1234">
+                        </div>
+                        <button class="btn" onclick="addChild()">Add Child to Family</button>
+                        
+                        <div id="childrenList"></div>
+                    </div>
+
+                    <!-- Tasks Tab -->
+                    <div id="tasksTab" class="tab-content">
+                        <h3>📋 Create Task</h3>
+                        <div class="form-group">
+                            <label>Task Title</label>
+                            <input type="text" id="taskTitle" placeholder="e.g., Clean your room">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" id="taskDescription" placeholder="Task details">
+                        </div>
+                        <div class="form-group">
+                            <label>Reward Amount (₦)</label>
+                            <input type="number" id="taskReward" placeholder="100" min="1" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency</label>
+                            <select id="taskFrequency">
+                                <option value="once">One Time</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="createTask()">Create Task</button>
+                        
+                        <div id="tasksList"></div>
+                    </div>
+
+                    <!-- Dashboard Tab -->
+                    <div id="dashboardTab" class="tab-content">
+                        <h3>📊 Family Dashboard</h3>
+                        <div id="dashboardContent" class="loading">Loading dashboard...</div>
+                    </div>
+                </div>
+
+                <!-- Child View -->
+                <div id="childView" class="hidden">
+                    <div class="balance-card">
+                        <div class="balance-amount">₦<span id="childBalance">0</span></div>
+                        <div>Your Rewards Balance</div>
+                    </div>
+
+                    <h3>📋 My Tasks</h3>
+                    <div id="childTasks" class="loading">Loading your tasks...</div>
+                </div>
+
+                <div id="appMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://voxspei-family-tasks.onrender.com';
+        let currentUser = null;
+        let authToken = null;
+        let children = [];
+
+        // Tab Management
+        function switchTab(tabName) {
+            document.querySelectorAll('#authSection .tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#authSection .tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function switchAppTab(tabName) {
+            document.querySelectorAll('#appSection .tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#appSection .tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            if (tabName === 'dashboard') {
+                loadDashboard();
+            } else if (tabName === 'children') {
+                loadChildren();
+            } else if (tabName === 'tasks') {
+                loadTasks();
+            }
+        }
+
+        // Authentication
+        async function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (!name || !email || !password) {
+                showMessage('authMessage', 'Please fill all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('authMessage', 'Account created successfully! Please login.', 'success');
+                    switchTab('login');
+                    document.getElementById('loginEmail').value = email;
+                } else {
+                    showMessage('authMessage', data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('authMessage', 'Network error. Please try again.', 'error');
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showMessage('authMessage', 'Please enter email and password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentUser = data.user;
+                    authToken = data.token;
+                    showApp();
+                } else {
+                    showMessage('authMessage', data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('authMessage', 'Network error. Please try again.', 'error');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            authToken = null;
+            children = [];
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('appSection').classList.add('hidden');
+            document.getElementById('authMessage').innerHTML = '';
+        }
+
+        function showApp() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('appSection').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = `Role: ${currentUser.role}`;
+
+            if (currentUser.role === 'parent') {
+                document.getElementById('parentView').classList.remove('hidden');
+                document.getElementById('childView').classList.add('hidden');
+                loadChildren();
+            } else {
+                document.getElementById('parentView').classList.add('hidden');
+                document.getElementById('childView').classList.remove('hidden');
+                loadChildTasks();
+                loadChildBalance();
+            }
+        }
+
+        // Parent Functions
+        async function addChild() {
+            const name = document.getElementById('childName').value;
+            const pin = document.getElementById('childPin').value;
+
+            if (!name || !pin) {
+                showMessage('appMessage', 'Please enter child name and PIN', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/parents/${currentUser.id}/invite-child`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ name, pin })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('appMessage', `${name} added successfully!`, 'success');
+                    document.getElementById('childName').value = '';
+                    document.getElementById('childPin').value = '1234';
+                    children.push(data.child);
+                    updateChildrenDisplay();
+                } else {
+                    showMessage('appMessage', data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('appMessage', 'Network error. Please try again.', 'error');
+            }
+        }
+
+        function loadChildren() {
+            updateChildrenDisplay();
+        }
+
+        function updateChildrenDisplay() {
+            const container = document.getElementById('childrenList');
+            if (children.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; margin-top: 20px;">No children added yet. Add your first child above!</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <h4 style="margin-top: 30px; margin-bottom: 15px;">Your Children:</h4>
+                ${children.map(child => `
+                    <div class="task-item">
+                        <div class="task-title">${child.name}</div>
+                        <div style="font-size: 14px; color: #666;">PIN: ****</div>
+                        <div style="font-size: 12px; color: #28a745; margin-top: 5px;">✅ Active</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        async function createTask() {
+            if (children.length === 0) {
+                showMessage('appMessage', 'Please add a child first before creating tasks!', 'error');
+                return;
+            }
+
+            const title = document.getElementById('taskTitle').value;
+            const description = document.getElementById('taskDescription').value;
+            const reward = document.getElementById('taskReward').value;
+            const frequency = document.getElementById('taskFrequency').value;
+
+            if (!title || !reward) {
+                showMessage('appMessage', 'Please fill in task title and reward amount', 'error');
+                return;
+            }
+
+            // Use the first child for now (in a real app, you'd let parents select)
+            const childId = children[0].id;
+
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        child_id: childId,
+                        title,
+                        description,
+                        value_amount: parseInt(reward),
+                        repeat: frequency
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('appMessage', 'Task created successfully!', 'success');
+                    // Clear form
+                    document.getElementById('taskTitle').value = '';
+                    document.getElementById('taskDescription').value = '';
+                    document.getElementById('taskReward').value = '100';
+                    loadTasks();
+                } else {
+                    showMessage('appMessage', data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('appMessage', 'Network error. Please try again.', 'error');
+            }
+        }
+
+        async function loadTasks() {
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayTasks(data.tasks);
+                }
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        function displayTasks(tasks) {
+            const container = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; margin-top: 20px;">No tasks created yet. Create your first task above!</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <h4 style="margin-top: 30px; margin-bottom: 15px;">Recent Tasks:</h4>
+                ${tasks.map(task => `
+                    <div class="task-item">
+                        <div class="task-title">${task.title}</div>
+                        <div style="font-size: 14px; color: #666; margin: 5px 0;">${task.description || 'No description'}</div>
+                        <div class="task-reward">Reward: ₦${task.value_amount}</div>
+                        <div class="task-status status-${task.status}">${task.status.toUpperCase()}</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/reports/parent-dashboard`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayDashboard(data.dashboard);
+                }
+            } catch (error) {
+                document.getElementById('dashboardContent').innerHTML = 'Error loading dashboard';
+            }
+        }
+
+        function displayDashboard(dashboard) {
+            document.getElementById('dashboardContent').innerHTML = `
+                <div class="balance-card">
+                    <div style="font-size: 18px; margin-bottom: 15px;">📊 Family Overview</div>
+                    <div style="font-size: 14px; line-height: 1.6;">
+                        👨‍👩‍👧‍👦 Children: ${dashboard.summary.total_children}<br>
+                        📋 Total Tasks: ${dashboard.summary.total_tasks}<br>
+                        💰 Rewards Given: ₦${dashboard.summary.total_rewards_distributed || 0}<br>
+                        ⏳ Pending Approvals: ${dashboard.summary.pending_approvals || 0}
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <h4>🎯 Getting Started Tips:</h4>
+                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.6;">
+                        <li>Add all your children first</li>
+                        <li>Create simple daily tasks to start</li>
+                        <li>Set reasonable reward amounts</li>
+                        <li>Check back regularly to approve completed tasks</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Child Functions
+        async function loadChildTasks() {
+            try {
+                const response = await fetch(`${API_URL}/children/${currentUser.id}/tasks`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayChildTasks(data.tasks);
+                }
+            } catch (error) {
+                document.getElementById('childTasks').innerHTML = 'Error loading tasks';
+            }
+        }
+
+        function displayChildTasks(tasks) {
+            const container = document.getElementById('childTasks');
+            if (tasks.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No tasks assigned yet. Ask your parents to create some tasks for you!</p>';
+                return;
+            }
+
+            container.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <div class="task-title">${task.title}</div>
+                    <div style="font-size: 14px; color: #666; margin: 5px 0;">${task.description || ''}</div>
+                    <div class="task-reward">Reward: ₦${task.value_amount}</div>
+                    <div class="task-status status-${task.status}">${task.status.toUpperCase()}</div>
+                    ${task.status === 'assigned' ? '<button class="btn" style="margin-top: 10px; font-size: 14px; padding: 10px;" onclick="completeTask(\'' + task.id + '\')">✅ Mark Complete</button>' : ''}
+                </div>
+            `).join('');
+        }
+
+        async function loadChildBalance() {
+            try {
+                const response = await fetch(`${API_URL}/rewards`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('childBalance').textContent = data.summary.total_balance || 0;
+                }
+            } catch (error) {
+                console.error('Error loading balance:', error);
+            }
+        }
+
+        // Utility Functions
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="alert ${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 5000);
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('VoxSpei Family Tasks App Loaded and Ready! 🚀');
+        });
+    </script>
+</body>
+</html>
