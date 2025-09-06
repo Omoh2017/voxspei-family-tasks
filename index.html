@@ -105,12 +105,6 @@
             font-weight: 400;
         }
 
-        .family-illustration {
-            margin: 24px 0 16px;
-            font-size: 48px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-        }
-
         .content {
             padding: 32px 24px 24px;
             flex: 1;
@@ -157,12 +151,6 @@
         .feature-item:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
-        }
-
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-            display: block;
         }
 
         .feature-text {
@@ -257,21 +245,6 @@
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
         }
 
         .btn:hover {
@@ -427,19 +400,6 @@
             overflow: hidden;
         }
 
-        .balance-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="white" opacity="0.1"><circle cx="50" cy="50" r="40"/></svg>');
-            background-size: 120px;
-            background-position: top right;
-            background-repeat: no-repeat;
-        }
-
         .balance-content {
             position: relative;
             z-index: 1;
@@ -509,18 +469,6 @@
             color: var(--text-secondary);
         }
 
-        .loading::after {
-            content: '';
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-left: 8px;
-        }
-
         .hidden { 
             display: none !important; 
         }
@@ -529,12 +477,6 @@
             text-align: center;
             padding: 40px 20px;
             color: var(--text-secondary);
-        }
-
-        .empty-state .emoji {
-            font-size: 48px;
-            margin-bottom: 16px;
-            display: block;
         }
 
         .empty-state h3 {
@@ -588,11 +530,6 @@
                 padding: 24px 16px 20px;
             }
             
-            .family-illustration {
-                font-size: 40px;
-                margin: 16px 0 12px;
-            }
-            
             .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -602,57 +539,34 @@
                 font-size: 28px;
             }
         }
-
-        /* Performance optimizations */
-        .app-container {
-            contain: layout style paint;
-        }
-
-        .tab-content {
-            contain: layout;
-        }
-
-        /* Reduce motion for accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
             <div class="header-content">
-                <h1>🏠 VoxSpei</h1>
+                <h1>VoxSpei</h1>
                 <p>Family Tasks & Rewards</p>
-                <div class="family-illustration">👨‍🦱👩‍🦱👧🏽👦🏽👶🏽</div>
             </div>
         </div>
 
         <div class="content">
             <!-- Welcome Section -->
             <div class="welcome-section">
-                <h2>Welcome to VoxSpei! 👨‍👩‍👧‍👦</h2>
+                <h2>Welcome to VoxSpei!</h2>
                 <p>Transform chores into fun family achievements with our smart task management system!</p>
                 
                 <div class="feature-grid">
                     <div class="feature-item">
-                        <span class="feature-icon">📋</span>
                         <div class="feature-text">Assign Tasks</div>
                     </div>
                     <div class="feature-item">
-                        <span class="feature-icon">🏆</span>
                         <div class="feature-text">Earn Rewards</div>
                     </div>
                     <div class="feature-item">
-                        <span class="feature-icon">📊</span>
                         <div class="feature-text">Track Progress</div>
                     </div>
                     <div class="feature-item">
-                        <span class="feature-icon">💪</span>
                         <div class="feature-text">Build Habits</div>
                     </div>
                 </div>
@@ -725,7 +639,7 @@
                     <!-- Children Tab -->
                     <div id="childrenTab" class="tab-content active">
                         <div class="section-title">
-                            👨‍👩‍👧‍👦 Add Child to Family
+                            Add Child to Family
                         </div>
                         <div class="form-group">
                             <label>Child's Name</label>
@@ -745,7 +659,7 @@
                     <!-- Tasks Tab -->
                     <div id="tasksTab" class="tab-content">
                         <div class="section-title">
-                            📋 Create New Task
+                            Create New Task
                         </div>
                         <div class="form-group">
                             <label>Task Title</label>
@@ -756,7 +670,7 @@
                             <input type="text" id="taskDescription" placeholder="Detailed instructions">
                         </div>
                         <div class="form-group">
-                            <label>Reward Amount (₦)</label>
+                            <label>Reward Amount (NGN)</label>
                             <input type="number" id="taskReward" placeholder="100" min="1" value="100">
                         </div>
                         <div class="form-group">
@@ -777,7 +691,7 @@
                     <!-- Dashboard Tab -->
                     <div id="dashboardTab" class="tab-content">
                         <div class="section-title">
-                            📊 Family Dashboard
+                            Family Dashboard
                         </div>
                         <div id="dashboardContent" class="loading">Loading your family dashboard...</div>
                     </div>
@@ -787,13 +701,13 @@
                 <div id="childView" class="hidden">
                     <div class="balance-card">
                         <div class="balance-content">
-                            <div class="balance-amount">₦<span id="childBalance">0</span></div>
+                            <div class="balance-amount">NGN<span id="childBalance">0</span></div>
                             <div class="balance-label">Your Rewards Balance</div>
                         </div>
                     </div>
 
                     <div class="section-title">
-                        📋 My Tasks Today
+                        My Tasks Today
                     </div>
                     <div id="childTasks" class="loading">Loading your tasks...</div>
                 </div>
@@ -839,7 +753,7 @@
                 }
             }
             
-            console.log('VoxSpei Family Tasks App Loaded! 🚀');
+            console.log('VoxSpei Family Tasks App Loaded!');
         });
 
         // Session persistence
@@ -883,7 +797,7 @@
             }
         }
 
-        // Tab Management with improved performance
+        // Tab Management
         function switchTab(tabName) {
             const authButtons = document.querySelectorAll('#authSection .tab-button');
             const authContents = document.querySelectorAll('#authSection .tab-content');
@@ -915,7 +829,7 @@
             }
         }
 
-        // Enhanced Authentication with better error handling
+        // Authentication with better error handling
         async function signup() {
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
@@ -943,7 +857,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showNotification('Account created successfully! 🎉');
+                    showNotification('Account created successfully!');
                     showMessage('authMessage', 'Account created! Please login below.', 'success');
                     switchTab('login');
                     document.getElementById('loginEmail').value = email;
@@ -986,7 +900,7 @@
                     currentUser = data.user;
                     authToken = data.token;
                     saveSession();
-                    showNotification(`Welcome back, ${data.user.name}! 👋`);
+                    showNotification(`Welcome back, ${data.user.name}!`);
                     showApp();
                 } else {
                     showMessage('authMessage', data.error || 'Invalid login credentials', 'error');
@@ -1029,7 +943,7 @@
             }
         }
 
-        // Enhanced Parent Functions with better UX
+        // FIXED: Add Child Function - Uses working signup route instead of broken invite route
         async function addChild() {
             const name = document.getElementById('childName').value.trim();
             const pin = document.getElementById('childPin').value.trim();
@@ -1047,19 +961,32 @@
             setButtonLoading('addChildBtn', true);
 
             try {
-                const response = await fetch(`${API_URL}/parents/${currentUser.id}/invite-child`, {
+                // Create child account using the working signup route
+                const response = await fetch(`${API_URL}/auth/signup`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name, pin })
+                    body: JSON.stringify({ 
+                        name, 
+                        email: `${name.toLowerCase().replace(/\s+/g, '')}@${currentUser.id}.child.local`,
+                        password: pin,
+                        role: 'child'
+                    })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    showNotification(`${name} added to your family! 👨‍👩‍👧‍👦`);
+                    // Create a child object for our local storage
+                    const childData = {
+                        id: data.user.id,
+                        name: name,
+                        email: data.user.email,
+                        created_at: new Date().toISOString()
+                    };
+
+                    showNotification(`${name} added to your family!`);
                     showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
                     
                     // Clear form
@@ -1067,15 +994,11 @@
                     document.getElementById('childPin').value = '1234';
                     
                     // Add to children array
-                    children.push(data.child);
+                    children.push(childData);
                     updateChildrenDisplay();
                     
                 } else {
-                    if (data.error && data.error.includes('route not found')) {
-                        showMessage('appMessage', 'Feature temporarily unavailable. Please try again later.', 'error');
-                    } else {
-                        showMessage('appMessage', data.error || 'Failed to add child', 'error');
-                    }
+                    showMessage('appMessage', data.error || 'Failed to add child', 'error');
                 }
             } catch (error) {
                 showMessage('appMessage', 'Connection error. Please check your internet and try again.', 'error');
@@ -1094,7 +1017,6 @@
             if (children.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <span class="emoji">👶</span>
                         <h3>No children added yet</h3>
                         <p>Add your first child to get started with family task management!</p>
                     </div>
@@ -1103,7 +1025,7 @@
             }
 
             container.innerHTML = `
-                <div class="section-title">👨‍👩‍👧‍👦 Your Family</div>
+                <div class="section-title">Your Family</div>
                 ${children.map(child => `
                     <div class="task-item">
                         <div class="task-title">${child.name}</div>
@@ -1164,7 +1086,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showNotification('Task created successfully! 📋');
+                    showNotification('Task created successfully!');
                     showMessage('appMessage', `Task "${title}" created successfully!`, 'success');
                     
                     // Clear form
@@ -1197,7 +1119,6 @@
                 } else {
                     document.getElementById('tasksList').innerHTML = `
                         <div class="empty-state">
-                            <span class="emoji">⚠️</span>
                             <h3>Unable to load tasks</h3>
                             <p>Please try refreshing the page</p>
                         </div>
@@ -1214,7 +1135,6 @@
             if (tasks.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <span class="emoji">📋</span>
                         <h3>No tasks created yet</h3>
                         <p>Create your first task above to get started!</p>
                     </div>
@@ -1223,13 +1143,13 @@
             }
 
             container.innerHTML = `
-                <div class="section-title">📋 Recent Tasks</div>
+                <div class="section-title">Recent Tasks</div>
                 ${tasks.map(task => `
                     <div class="task-item">
                         <div class="task-title">${task.title}</div>
                         <div class="task-description">${task.description || 'No description provided'}</div>
                         <div class="task-meta">
-                            <div class="task-reward">₦${task.value_amount}</div>
+                            <div class="task-reward">NGN${task.value_amount}</div>
                             <div class="task-status status-${task.status}">${task.status}</div>
                         </div>
                         <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
@@ -1253,7 +1173,6 @@
                 } else {
                     document.getElementById('dashboardContent').innerHTML = `
                         <div class="empty-state">
-                            <span class="emoji">⚠️</span>
                             <h3>Unable to load dashboard</h3>
                             <p>Please try refreshing the page</p>
                         </div>
@@ -1262,7 +1181,6 @@
             } catch (error) {
                 document.getElementById('dashboardContent').innerHTML = `
                     <div class="empty-state">
-                        <span class="emoji">📊</span>
                         <h3>Dashboard temporarily unavailable</h3>
                         <p>Please check your connection and try again</p>
                     </div>
@@ -1276,7 +1194,7 @@
             document.getElementById('dashboardContent').innerHTML = `
                 <div class="balance-card">
                     <div class="balance-content">
-                        <div style="font-size: 20px; margin-bottom: 16px;">📊 Family Overview</div>
+                        <div style="font-size: 20px; margin-bottom: 16px;">Family Overview</div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
                             <div>
                                 <div style="opacity: 0.9;">Children</div>
@@ -1289,17 +1207,17 @@
                         </div>
                         <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
                             <div style="opacity: 0.9; font-size: 14px;">Total Rewards Given</div>
-                            <div style="font-size: 24px; font-weight: 700;">₦${summary.total_rewards_distributed || 0}</div>
+                            <div style="font-size: 24px; font-weight: 700;">NGN${summary.total_rewards_distributed || 0}</div>
                         </div>
                     </div>
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #BAE6FD;">
-                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">🎯 Getting Started Tips</h3>
+                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">Getting Started Tips</h3>
                     <ul style="margin: 0; padding-left: 20px; line-height: 1.8; color: var(--text-primary);">
                         <li>Add all your children to the family first</li>
                         <li>Start with simple daily tasks like "Make your bed"</li>
-                        <li>Set reasonable reward amounts (₦50-200)</li>
+                        <li>Set reasonable reward amounts (NGN50-200)</li>
                         <li>Check back regularly to approve completed tasks</li>
                         <li>Celebrate achievements to keep kids motivated!</li>
                     </ul>
@@ -1307,14 +1225,14 @@
                 
                 ${summary.total_children === 0 ? `
                     <div style="background: #FEF3C7; padding: 16px; border-radius: 12px; margin-top: 16px; border: 1px solid #FCD34D;">
-                        <div style="color: #92400E; font-weight: 600; margin-bottom: 8px;">👶 Add Your First Child</div>
+                        <div style="color: #92400E; font-weight: 600; margin-bottom: 8px;">Add Your First Child</div>
                         <div style="color: #92400E; font-size: 14px;">Go to the "Children" tab to add your first family member and start creating tasks!</div>
                     </div>
                 ` : ''}
             `;
         }
 
-        // Enhanced Child Functions
+        // Child Functions
         async function loadChildTasks() {
             try {
                 const response = await fetch(`${API_URL}/children/${currentUser.id}/tasks`, {
@@ -1328,7 +1246,6 @@
                 } else {
                     document.getElementById('childTasks').innerHTML = `
                         <div class="empty-state">
-                            <span class="emoji">📋</span>
                             <h3>No tasks yet</h3>
                             <p>Ask your parents to create some tasks for you!</p>
                         </div>
@@ -1337,7 +1254,6 @@
             } catch (error) {
                 document.getElementById('childTasks').innerHTML = `
                     <div class="empty-state">
-                        <span class="emoji">⚠️</span>
                         <h3>Unable to load tasks</h3>
                         <p>Please try refreshing the page</p>
                     </div>
@@ -1351,7 +1267,6 @@
             if (tasks.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <span class="emoji">🎯</span>
                         <h3>No tasks assigned yet</h3>
                         <p>Your parents haven't created any tasks for you yet. Check back soon!</p>
                     </div>
@@ -1364,20 +1279,20 @@
                     <div class="task-title">${task.title}</div>
                     <div class="task-description">${task.description || 'No additional details'}</div>
                     <div class="task-meta">
-                        <div class="task-reward">₦${task.value_amount}</div>
+                        <div class="task-reward">NGN${task.value_amount}</div>
                         <div class="task-status status-${task.status}">${task.status}</div>
                     </div>
                     ${task.status === 'assigned' ? `
                         <button class="btn" style="margin-top: 12px; font-size: 14px; padding: 12px;" onclick="completeTask('${task.id}')">
-                            ✅ Mark Complete
+                            Mark Complete
                         </button>
                     ` : task.status === 'completed' ? `
                         <div style="margin-top: 12px; padding: 8px; background: #DBEAFE; border-radius: 8px; color: #1E40AF; font-size: 14px; text-align: center;">
-                            ⏳ Waiting for parent approval
+                            Waiting for parent approval
                         </div>
                     ` : `
                         <div style="margin-top: 12px; padding: 8px; background: #D1FAE5; border-radius: 8px; color: #065F46; font-size: 14px; text-align: center;">
-                            🎉 Completed! Reward earned
+                            Completed! Reward earned
                         </div>
                     `}
                 </div>
@@ -1385,8 +1300,7 @@
         }
 
         async function completeTask(taskId) {
-            // This would need the task occurrence ID in a real implementation
-            showNotification('Task completion feature coming soon! 🚧');
+            showNotification('Task completion feature coming soon!');
         }
 
         async function loadChildBalance() {
@@ -1408,7 +1322,7 @@
             }
         }
 
-        // Enhanced Utility Functions
+        // Utility Functions
         function showMessage(elementId, message, type) {
             const element = document.getElementById(elementId);
             if (!element) return;
@@ -1420,32 +1334,6 @@
                 setTimeout(() => {
                     element.innerHTML = '';
                 }, 5000);
-            }
-        }
-
-        // Performance monitoring
-        let performanceMetrics = {
-            apiCalls: 0,
-            errors: 0,
-            loadTime: Date.now()
-        };
-
-        // Enhanced error handling with retry logic
-        async function fetchWithRetry(url, options, retries = 2) {
-            performanceMetrics.apiCalls++;
-            
-            for (let i = 0; i <= retries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    return response;
-                } catch (error) {
-                    if (i === retries) {
-                        performanceMetrics.errors++;
-                        throw error;
-                    }
-                    // Wait before retry
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-                }
             }
         }
 
@@ -1465,42 +1353,6 @@
                 }
             }
         });
-
-        // Improved accessibility
-        function addAccessibilityFeatures() {
-            // Add ARIA labels
-            document.querySelectorAll('.btn').forEach(btn => {
-                if (!btn.getAttribute('aria-label')) {
-                    btn.setAttribute('aria-label', btn.textContent);
-                }
-            });
-
-            // Add focus management
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.addEventListener('keydown', function(e) {
-                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                        const buttons = Array.from(btn.parentElement.children);
-                        const currentIndex = buttons.indexOf(btn);
-                        const nextIndex = e.key === 'ArrowRight' 
-                            ? (currentIndex + 1) % buttons.length
-                            : (currentIndex - 1 + buttons.length) % buttons.length;
-                        buttons[nextIndex].focus();
-                        buttons[nextIndex].click();
-                    }
-                });
-            });
-        }
-
-        // Initialize accessibility features when DOM is ready
-        document.addEventListener('DOMContentLoaded', addAccessibilityFeatures);
-
-        // Service worker for offline support (optional)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                // Register service worker for offline functionality
-                // This would need a separate service worker file
-            });
-        }
     </script>
 </body>
 </html>
