@@ -8,591 +8,530 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #3B82F6;
-            --primary-blue-light: #60A5FA;
-            --primary-blue-dark: #1D4ED8;
-            --accent-blue: #1E40AF;
-            --background: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --text-primary: #1E293B;
-            --text-secondary: #64748B;
-            --success: #10B981;
-            --error: #EF4444;
-            --warning: #F59E0B;
-            --border: #E2E8F0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--background);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 100vw;
-            min-height: 100vh;
-            background: var(--card-bg);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        @media (min-width: 768px) {
-            body {
-                padding: 20px;
-                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
-            }
-            
-            .app-container {
-                max-width: 440px;
-                margin: 0 auto;
-                border-radius: 24px;
-                box-shadow: var(--shadow-lg);
-                min-height: calc(100vh - 40px);
-            }
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            color: white;
-            padding: 32px 24px 28px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><path d="M0,0v46c55.3,0,100,44.7,100,100h800c0-55.3,44.7-100,100-100V0H0z"/></svg>');
-            background-size: cover;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-        }
-
-        .header p {
-            opacity: 0.95;
-            font-size: 16px;
-            font-weight: 400;
-        }
-
-        .content {
-            padding: 32px 24px 24px;
-            flex: 1;
-        }
-
-        .welcome-section {
-            text-align: center;
-            padding: 32px 24px;
-            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
-            border-radius: 16px;
-            margin-bottom: 32px;
-            border: 1px solid #BAE6FD;
-        }
-
-        .welcome-section h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--primary-blue-dark);
-        }
-
-        .welcome-section p {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 24px 0;
-        }
-
-        .feature-item {
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .feature-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-            line-height: 1.4;
-        }
-
-        .tab-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: #F1F5F9;
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 24px;
-            gap: 4px;
-        }
-
-        .tab-button {
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            color: var(--text-secondary);
-        }
-
-        .tab-button.active {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--text-primary);
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.2s ease;
-            background: white;
-            color: var(--text-primary);
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn.loading::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .alert {
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 14px;
-            border: 1px solid;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .alert.success {
-            background: #ECFDF5;
-            color: #065F46;
-            border-color: #A7F3D0;
-        }
-
-        .alert.error {
-            background: #FEF2F2;
-            color: #991B1B;
-            border-color: #FECACA;
-        }
-
-        .task-item {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .task-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--primary-blue);
-        }
-
-        .task-item:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow);
-        }
-
-        .task-title {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .task-description {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .task-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .task-reward {
-            color: var(--success);
-            font-weight: 600;
-            font-size: 14px;
-            background: #ECFDF5;
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-
-        .task-status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-assigned { 
-            background: #FEF3C7; 
-            color: #92400E; 
-        }
-        .status-completed { 
-            background: #DBEAFE; 
-            color: #1E40AF; 
-        }
-        .status-approved { 
-            background: #D1FAE5; 
-            color: #065F46; 
-        }
-
-        .child-item {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .child-item:hover {
-            background: #F8FAFC;
-            border-color: var(--primary-blue);
-        }
-
-        .child-progress {
-            margin-top: 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #E2E8F0;
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 4px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--success);
-            transition: width 0.3s ease;
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            color: white;
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .balance-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .balance-amount {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-        }
-
-        .balance-label {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .user-info {
-            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-details h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: var(--text-secondary);
-            background: white;
-            padding: 2px 8px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 14px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .logout-btn:hover {
-            background: white;
-            color: var(--error);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .hidden { 
-            display: none !important; 
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 24px 0 16px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notification-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--success);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-weight: 500;
-            box-shadow: var(--shadow);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification-toast.show {
-            transform: translateX(0);
-        }
-
-        .back-btn {
-            background: var(--text-secondary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .back-btn:hover {
-            background: var(--text-primary);
-        }
-
-        @media (max-width: 480px) {
-            .content {
-                padding: 24px 16px 16px;
-            }
-            
-            .header {
-                padding: 24px 16px 20px;
-            }
-            
-            .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .balance-amount {
-                font-size: 28px;
-            }
-        }
-    </style>
+:root {
+    --primary-blue: #3B82F6;
+    --primary-blue-light: #60A5FA;
+    --primary-blue-dark: #1D4ED8;
+    --accent-blue: #1E40AF;
+    --background: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --success: #10B981;
+    --error: #EF4444;
+    --warning: #F59E0B;
+    --border: #E2E8F0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 100vw;
+    min-height: 100vh;
+    background: var(--card-bg);
+    position: relative;
+    overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+    body {
+        padding: 20px;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+    }
+    
+    .app-container {
+        max-width: 440px;
+        margin: 0 auto;
+        border-radius: 24px;
+        box-shadow: var(--shadow-lg);
+        min-height: calc(100vh - 40px);
+    }
+}
+
+.header {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.header p {
+    opacity: 0.95;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.content {
+    padding: 32px 24px 24px;
+    flex: 1;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border-radius: 16px;
+    margin-bottom: 32px;
+    border: 1px solid #BAE6FD;
+}
+
+.welcome-section h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--primary-blue-dark);
+}
+
+.welcome-section p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.feature-item {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.feature-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.tab-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #F1F5F9;
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+    gap: 4px;
+}
+
+.tab-button {
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+}
+
+.tab-button.active {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background: white;
+    color: var(--text-primary);
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.alert {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid;
+}
+
+.alert.success {
+    background: #ECFDF5;
+    color: #065F46;
+    border-color: #A7F3D0;
+}
+
+.alert.error {
+    background: #FEF2F2;
+    color: #991B1B;
+    border-color: #FECACA;
+}
+
+.hidden { 
+    display: none !important; 
+}
+
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.notification-toast.show {
+    transform: translateX(0);
+}
+
+.task-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.task-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-blue);
+}
+
+.task-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.task-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.task-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.task-reward {
+    color: var(--success);
+    font-weight: 600;
+    font-size: 14px;
+    background: #ECFDF5;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.task-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-assigned { 
+    background: #FEF3C7; 
+    color: #92400E; 
+}
+.status-completed { 
+    background: #DBEAFE; 
+    color: #1E40AF; 
+}
+.status-approved { 
+    background: #D1FAE5; 
+    color: #065F46; 
+}
+
+.balance-card {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-amount {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.balance-label {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.user-info {
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-details h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.user-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: white;
+    padding: 2px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: white;
+    color: var(--error);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 24px 0 16px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.checkbox-item {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-item:hover {
+    border-color: var(--primary-blue);
+}
+
+.checkbox-item.selected {
+    border-color: var(--primary-blue);
+    background: #F0F9FF;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-item label {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    cursor: pointer;
+    flex: 1;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 24px 16px 16px;
+    }
+    
+    .header {
+        padding: 24px 16px 20px;
+    }
+    
+    .feature-grid, .checkbox-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .balance-amount {
+        font-size: 28px;
+    }
+}
+</style>
 </head>
 <body>
     <div class="app-container">
         <div class="header">
-            <div class="header-content">
-                <h1>VoxSpei</h1>
-                <p>Family Tasks & Rewards</p>
-            </div>
+            <h1>VoxSpei</h1>
+            <p>Family Tasks & Rewards</p>
         </div>
 
         <div class="content">
@@ -603,16 +542,16 @@
                 
                 <div class="feature-grid">
                     <div class="feature-item">
-                        <div class="feature-text">Assign Tasks</div>
+                        <div class="feature-text">Pre-built Tasks</div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-text">Earn Rewards</div>
+                        <div class="feature-text">Child Rewards</div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-text">Track Progress</div>
+                        <div class="feature-text">Monthly Reports</div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-text">Build Habits</div>
+                        <div class="feature-text">Family Progress</div>
                     </div>
                 </div>
                 
@@ -622,11 +561,11 @@
             <!-- Login/Signup Section -->
             <div id="authSection">
                 <div class="tab-buttons">
-                    <button class="tab-button active" onclick="switchTab('login')">Login</button>
-                    <button class="tab-button" onclick="switchTab('signup')">Sign Up</button>
+                    <button class="tab-button active" onclick="window.switchTab('login')">Parent Login</button>
+                    <button class="tab-button" onclick="window.switchTab('child')">Child Login</button>
                 </div>
 
-                <!-- Login Tab -->
+                <!-- Parent Login Tab -->
                 <div id="loginTab" class="tab-content active">
                     <div class="form-group">
                         <label>Email Address</label>
@@ -636,13 +575,34 @@
                         <label>Password</label>
                         <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
                     </div>
-                    <button class="btn" onclick="login()" id="loginBtn">
+                    <button class="btn" onclick="window.login()" id="loginBtn">
                         Login to Your Family
+                    </button>
+                    
+                    <div style="text-align: center; margin-top: 16px;">
+                        <button type="button" onclick="window.showSignup()" style="background: none; border: none; color: var(--primary-blue); text-decoration: underline; cursor: pointer;">
+                            Don't have an account? Sign up here
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Child Login Tab -->
+                <div id="childTab" class="tab-content">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="childLoginName" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Your PIN</label>
+                        <input type="password" id="childLoginPin" placeholder="Enter your 4-digit PIN" maxlength="4">
+                    </div>
+                    <button class="btn" onclick="window.childLogin()" id="childLoginBtn">
+                        Access My Tasks
                     </button>
                 </div>
 
-                <!-- Signup Tab -->
-                <div id="signupTab" class="tab-content">
+                <!-- Signup Section (Hidden by default) -->
+                <div id="signupSection" class="hidden">
                     <div class="form-group">
                         <label>Your Full Name</label>
                         <input type="text" id="signupName" placeholder="Enter your full name" autocomplete="name">
@@ -655,9 +615,15 @@
                         <label>Create Password</label>
                         <input type="password" id="signupPassword" placeholder="Create a secure password" autocomplete="new-password">
                     </div>
-                    <button class="btn" onclick="signup()" id="signupBtn">
+                    <button class="btn" onclick="window.signup()" id="signupBtn">
                         Create Family Account
                     </button>
+                    
+                    <div style="text-align: center; margin-top: 16px;">
+                        <button type="button" onclick="window.showLogin()" style="background: none; border: none; color: var(--primary-blue); text-decoration: underline; cursor: pointer;">
+                            Already have an account? Login here
+                        </button>
+                    </div>
                 </div>
 
                 <div id="authMessage"></div>
@@ -670,75 +636,53 @@
                         <h3 id="userName">Welcome!</h3>
                         <div class="user-role" id="userRole">Parent</div>
                     </div>
-                    <button onclick="logout()" class="logout-btn">Logout</button>
+                    <button onclick="window.logout()" class="logout-btn">Logout</button>
                 </div>
 
                 <!-- Parent View -->
                 <div id="parentView" class="hidden">
                     <div class="tab-buttons">
-                        <button class="tab-button active" onclick="switchAppTab('children')">Children</button>
-                        <button class="tab-button" onclick="switchAppTab('tasks')">Tasks</button>
-                        <button class="tab-button" onclick="switchAppTab('dashboard')">Dashboard</button>
+                        <button class="tab-button active" onclick="window.switchAppTab('setup')">Setup</button>
+                        <button class="tab-button" onclick="window.switchAppTab('assignments')">Assignments</button>
+                        <button class="tab-button" onclick="window.switchAppTab('dashboard')">Dashboard</button>
                     </div>
 
-                    <!-- Children Tab -->
-                    <div id="childrenTab" class="tab-content active">
-                        <div class="section-title">Add Child to Family</div>
-                        <div class="form-group">
-                            <label>Child's Name</label>
-                            <input type="text" id="childName" placeholder="Enter child's name">
-                        </div>
-                        <div class="form-group">
-                            <label>Child's PIN (4 digits)</label>
-                            <input type="text" id="childPin" placeholder="Create a 4-digit PIN" maxlength="4" value="1234">
-                        </div>
-                        <button class="btn" onclick="addChild()" id="addChildBtn">
-                            Add Child to Family
-                        </button>
+                    <!-- Setup Tab -->
+                    <div id="setupTab" class="tab-content active">
+                        <div class="section-title">Family Setup</div>
                         
-                        <div id="childrenList"></div>
+                        <div id="childrenSection">
+                            <h3 style="font-size: 16px; margin-bottom: 12px;">Add Children</h3>
+                            <div class="form-group">
+                                <label>Child's Name</label>
+                                <input type="text" id="childName" placeholder="Enter child's name">
+                            </div>
+                            <div class="form-group">
+                                <label>Child's PIN (4 digits)</label>
+                                <input type="text" id="childPin" placeholder="Create a 4-digit PIN" maxlength="4" value="1234">
+                            </div>
+                            <button class="btn" onclick="window.addChild()" id="addChildBtn">
+                                Add Child to Family
+                            </button>
+                            <div id="childrenList"></div>
+                        </div>
+
+                        <div id="tasksSection" style="margin-top: 32px;">
+                            <h3 style="font-size: 16px; margin-bottom: 12px;">Select Household Tasks</h3>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                                Choose the tasks that apply to your household. You can customize rewards later.
+                            </p>
+                            <div id="defaultTasksList"></div>
+                            <button class="btn" onclick="window.saveSelectedTasks()" id="saveTasksBtn">
+                                Save Selected Tasks
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Child Detail View -->
-                    <div id="childDetailView" class="tab-content">
-                        <button class="back-btn" onclick="showChildrenList()">← Back to Children</button>
-                        <div id="childDetailContent"></div>
-                    </div>
-
-                    <!-- Tasks Tab -->
-                    <div id="tasksTab" class="tab-content">
-                        <div class="section-title">Create New Task</div>
-                        <div class="form-group">
-                            <label>Select Child</label>
-                            <select id="taskChildSelect">
-                                <option value="">Select a child...</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Task Title</label>
-                            <input type="text" id="taskTitle" placeholder="e.g., Clean your room">
-                        </div>
-                        <div class="form-group">
-                            <label>Task Description</label>
-                            <input type="text" id="taskDescription" placeholder="Detailed instructions">
-                        </div>
-                        <div class="form-group">
-                            <label>Reward Amount (NGN)</label>
-                            <input type="number" id="taskReward" placeholder="100" min="1" value="100">
-                        </div>
-                        <div class="form-group">
-                            <label>Task Frequency</label>
-                            <select id="taskFrequency">
-                                <option value="once">One Time Task</option>
-                                <option value="daily">Daily Task</option>
-                                <option value="weekly">Weekly Task</option>
-                            </select>
-                        </div>
-                        <button class="btn" onclick="createTask()" id="createTaskBtn">
-                            Create Task
-                        </button>
-                        
-                        <div id="tasksList"></div>
+                    <!-- Assignments Tab -->
+                    <div id="assignmentsTab" class="tab-content">
+                        <div class="section-title">Task Assignments</div>
+                        <div id="assignmentsList"></div>
                     </div>
 
                     <!-- Dashboard Tab -->
@@ -757,8 +701,22 @@
                         </div>
                     </div>
 
-                    <div class="section-title">My Tasks Today</div>
-                    <div id="childTasks" class="loading">Loading your tasks...</div>
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="window.switchChildTab('tasks')">My Tasks</button>
+                        <button class="tab-button" onclick="window.switchChildTab('rewards')">Rewards</button>
+                    </div>
+
+                    <!-- Child Tasks Tab -->
+                    <div id="childTasksTab" class="tab-content active">
+                        <div class="section-title">My Tasks</div>
+                        <div id="childTasks" class="loading">Loading your tasks...</div>
+                    </div>
+
+                    <!-- Child Rewards Tab -->
+                    <div id="childRewardsTab" class="tab-content">
+                        <div class="section-title">My Rewards</div>
+                        <div id="childRewards" class="loading">Loading your rewards...</div>
+                    </div>
                 </div>
 
                 <div id="appMessage"></div>
@@ -770,752 +728,847 @@
     <div id="notificationToast" class="notification-toast"></div>
 
     <script>
-        const API_URL = 'https://voxspei-family-tasks.onrender.com';
-        let currentUser = null;
-        let authToken = null;
-        let children = [];
-        let tasks = [];
-        let selectedChildId = null;
+// Global app object to avoid naming conflicts
+window.VoxSpeiApp = {
+    // Default household tasks
+    DEFAULT_TASKS: [
+        { id: 'clean_room', title: 'Clean Room', description: 'Tidy up bedroom and make bed', reward: 200 },
+        { id: 'wash_dishes', title: 'Wash Dishes', description: 'Clean plates, cups, and utensils', reward: 150 },
+        { id: 'take_trash', title: 'Take Out Trash', description: 'Empty trash bins and take to collection point', reward: 100 },
+        { id: 'sweep_floor', title: 'Sweep Floor', description: 'Sweep living areas and kitchen', reward: 150 },
+        { id: 'do_laundry', title: 'Do Laundry', description: 'Sort, wash, and fold clothes', reward: 250 },
+        { id: 'organize_toys', title: 'Organize Toys', description: 'Put toys back in their proper places', reward: 100 },
+        { id: 'water_plants', title: 'Water Plants', description: 'Water indoor and outdoor plants', reward: 75 },
+        { id: 'feed_pets', title: 'Feed Pets', description: 'Give food and water to family pets', reward: 100 },
+        { id: 'study_homework', title: 'Complete Homework', description: 'Finish all school assignments', reward: 300 },
+        { id: 'help_cooking', title: 'Help with Cooking', description: 'Assist in meal preparation', reward: 200 }
+    ],
 
-        // Cache DOM elements
-        const elements = {};
+    // App state
+    currentUser: null,
+    authToken: null,
+    children: [],
+    selectedTasks: [],
+    assignments: [],
+    rewards: []
+};
+
+// Tab switching functions
+window.switchTab = function(tabName) {
+    const authButtons = document.querySelectorAll('#authSection .tab-button');
+    const authContents = document.querySelectorAll('#authSection .tab-content');
+    
+    authButtons.forEach(btn => btn.classList.remove('active'));
+    authContents.forEach(content => content.classList.remove('active'));
+    
+    // Find the button that was clicked
+    const clickedButton = Array.from(authButtons).find(btn => 
+        btn.textContent.toLowerCase().includes(tabName.toLowerCase())
+    );
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
+    
+    // Show the correct tab content
+    if (tabName === 'login') {
+        document.getElementById('loginTab').classList.add('active');
+        document.getElementById('signupSection').classList.add('hidden');
+    } else if (tabName === 'child') {
+        document.getElementById('childTab').classList.add('active');
+        document.getElementById('signupSection').classList.add('hidden');
+    }
+};
+
+window.switchAppTab = function(tabName) {
+    const appButtons = document.querySelectorAll('#parentView .tab-button');
+    const appContents = document.querySelectorAll('#parentView .tab-content');
+    
+    appButtons.forEach(btn => btn.classList.remove('active'));
+    appContents.forEach(content => content.classList.remove('active'));
+    
+    const clickedButton = Array.from(appButtons).find(btn => 
+        btn.textContent.toLowerCase().includes(tabName.toLowerCase())
+    );
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
+    
+    document.getElementById(tabName + 'Tab').classList.add('active');
+    
+    if (tabName === 'dashboard') {
+        loadDashboard();
+    } else if (tabName === 'assignments') {
+        loadAssignments();
+    }
+};
+
+window.switchChildTab = function(tabName) {
+    const childButtons = document.querySelectorAll('#childView .tab-button');
+    const childContents = document.querySelectorAll('#childView .tab-content');
+    
+    childButtons.forEach(btn => btn.classList.remove('active'));
+    childContents.forEach(content => content.classList.remove('active'));
+    
+    const clickedButton = Array.from(childButtons).find(btn => 
+        btn.textContent.toLowerCase().includes(tabName.toLowerCase())
+    );
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
+    
+    document.getElementById('child' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').classList.add('active');
+    
+    if (tabName === 'rewards') {
+        loadChildRewards();
+    }
+};
+
+window.showSignup = function() {
+    document.getElementById('loginTab').classList.add('hidden');
+    document.getElementById('childTab').classList.add('hidden');
+    document.getElementById('signupSection').classList.remove('hidden');
+};
+
+window.showLogin = function() {
+    document.getElementById('signupSection').classList.add('hidden');
+    document.getElementById('loginTab').classList.remove('hidden');
+    document.getElementById('childTab').classList.add('hidden');
+    document.querySelectorAll('#authSection .tab-button').forEach(btn => btn.classList.remove('active'));
+    document.querySelector('#authSection .tab-button').classList.add('active');
+};
+
+// Utility functions
+function showNotification(message, type = 'success') {
+    const toast = document.getElementById('notificationToast');
+    toast.textContent = message;
+    toast.className = `notification-toast ${type} show`;
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+function showMessage(elementId, message, type) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    element.innerHTML = `<div class="alert ${type}">${message}</div>`;
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            element.innerHTML = '';
+        }, 5000);
+    }
+}
+
+function saveSession() {
+    const session = {
+        user: window.VoxSpeiApp.currentUser,
+        token: window.VoxSpeiApp.authToken,
+        children: window.VoxSpeiApp.children,
+        selectedTasks: window.VoxSpeiApp.selectedTasks,
+        assignments: window.VoxSpeiApp.assignments,
+        rewards: window.VoxSpeiApp.rewards
+    };
+    localStorage.setItem('voxspei_session', JSON.stringify(session));
+}
+
+function clearSession() {
+    localStorage.removeItem('voxspei_session');
+    window.VoxSpeiApp.currentUser = null;
+    window.VoxSpeiApp.authToken = null;
+    window.VoxSpeiApp.children = [];
+    window.VoxSpeiApp.selectedTasks = [];
+    window.VoxSpeiApp.assignments = [];
+    window.VoxSpeiApp.rewards = [];
+}
+
+function getCurrentMonth() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function isLastDayOfMonth() {
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    return now.getMonth() !== tomorrow.getMonth();
+}
+
+// Authentication functions
+window.signup = function() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+
+    if (!name || !email || !password) {
+        showMessage('authMessage', 'Please fill in all fields', 'error');
+        return;
+    }
+
+    if (password.length < 6) {
+        showMessage('authMessage', 'Password must be at least 6 characters long', 'error');
+        return;
+    }
+
+    const userData = {
+        id: `user_${Date.now()}`,
+        name: name,
+        email: email,
+        role: 'parent',
+        created_at: new Date().toISOString()
+    };
+
+    window.VoxSpeiApp.currentUser = userData;
+    window.VoxSpeiApp.authToken = `token_${Date.now()}`;
+    
+    saveSession();
+    showNotification('Account created successfully!');
+    showApp();
+};
+
+window.login = function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    if (!email || !password) {
+        showMessage('authMessage', 'Please enter your email and password', 'error');
+        return;
+    }
+
+    const userData = {
+        id: `user_${Date.now()}`,
+        name: email.split('@')[0],
+        email: email,
+        role: 'parent',
+        created_at: new Date().toISOString()
+    };
+
+    window.VoxSpeiApp.currentUser = userData;
+    window.VoxSpeiApp.authToken = `token_${Date.now()}`;
+    
+    saveSession();
+    showNotification(`Welcome back, ${userData.name}!`);
+    showApp();
+};
+
+window.childLogin = function() {
+    const name = document.getElementById('childLoginName').value.trim();
+    const pin = document.getElementById('childLoginPin').value.trim();
+
+    if (!name || !pin) {
+        showMessage('authMessage', 'Please enter your name and PIN', 'error');
+        return;
+    }
+
+    if (pin.length !== 4) {
+        showMessage('authMessage', 'PIN must be 4 digits', 'error');
+        return;
+    }
+
+    const allChildren = JSON.parse(localStorage.getItem('voxspei_all_children') || '[]');
+    const childData = allChildren.find(child => 
+        child.name.toLowerCase() === name.toLowerCase() && child.pin === pin
+    );
+
+    if (childData) {
+        window.VoxSpeiApp.currentUser = {
+            id: childData.id,
+            name: childData.name,
+            role: 'child',
+            parent_id: childData.parent_id
+        };
+        window.VoxSpeiApp.authToken = `child_token_${Date.now()}`;
         
-        document.addEventListener('DOMContentLoaded', function() {
-            elements.authSection = document.getElementById('authSection');
-            elements.appSection = document.getElementById('appSection');
-            elements.userName = document.getElementById('userName');
-            elements.userRole = document.getElementById('userRole');
-            elements.childBalance = document.getElementById('childBalance');
+        // Load parent's data for this child
+        const parentSession = JSON.parse(localStorage.getItem('voxspei_session') || '{}');
+        if (parentSession.user && parentSession.user.id === childData.parent_id) {
+            window.VoxSpeiApp.children = parentSession.children || [];
+            window.VoxSpeiApp.selectedTasks = parentSession.selectedTasks || [];
+            window.VoxSpeiApp.assignments = parentSession.assignments || [];
+            window.VoxSpeiApp.rewards = parentSession.rewards || [];
+        }
+        
+        saveSession();
+        showNotification(`Welcome, ${childData.name}!`);
+        showApp();
+    } else {
+        showMessage('authMessage', 'Invalid name or PIN. Please check with your parents.', 'error');
+    }
+};
+
+window.logout = function() {
+    clearSession();
+    
+    document.getElementById('authSection').classList.remove('hidden');
+    document.getElementById('appSection').classList.add('hidden');
+    document.getElementById('authMessage').innerHTML = '';
+    
+    window.showLogin();
+    showNotification('Logged out successfully', 'success');
+};
+
+function showApp() {
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('appSection').classList.remove('hidden');
+    document.getElementById('userName').textContent = window.VoxSpeiApp.currentUser.name;
+    document.getElementById('userRole').textContent = window.VoxSpeiApp.currentUser.role.charAt(0).toUpperCase() + window.VoxSpeiApp.currentUser.role.slice(1);
+
+    if (window.VoxSpeiApp.currentUser.role === 'parent') {
+        document.getElementById('parentView').classList.remove('hidden');
+        document.getElementById('childView').classList.add('hidden');
+        loadChildren();
+        loadSelectedTasks();
+    } else {
+        document.getElementById('parentView').classList.add('hidden');
+        document.getElementById('childView').classList.remove('hidden');
+        loadChildTasks();
+        loadChildBalance();
+    }
+}
+
+// Default tasks management
+function loadDefaultTasks() {
+    const container = document.getElementById('defaultTasksList');
+    container.innerHTML = window.VoxSpeiApp.DEFAULT_TASKS.map(task => `
+        <div class="checkbox-item" onclick="toggleTask('${task.id}')">
+            <input type="checkbox" id="task_${task.id}" onchange="toggleTask('${task.id}')">
+            <label for="task_${task.id}">
+                <div style="font-weight: 600;">${task.title}</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">NGN${task.reward} • ${task.description}</div>
+            </label>
+        </div>
+    `).join('');
+}
+
+function toggleTask(taskId) {
+    const checkbox = document.getElementById(`task_${taskId}`);
+    const item = checkbox.parentElement;
+    
+    if (checkbox.checked) {
+        item.classList.add('selected');
+        if (!window.VoxSpeiApp.selectedTasks.find(t => t.id === taskId)) {
+            const task = window.VoxSpeiApp.DEFAULT_TASKS.find(t => t.id === taskId);
+            window.VoxSpeiApp.selectedTasks.push(task);
+        }
+    } else {
+        item.classList.remove('selected');
+        window.VoxSpeiApp.selectedTasks = window.VoxSpeiApp.selectedTasks.filter(t => t.id !== taskId);
+    }
+}
+
+function loadSelectedTasks() {
+    window.VoxSpeiApp.selectedTasks.forEach(task => {
+        const checkbox = document.getElementById(`task_${task.id}`);
+        if (checkbox) {
+            checkbox.checked = true;
+            checkbox.parentElement.classList.add('selected');
+        }
+    });
+}
+
+window.saveSelectedTasks = function() {
+    if (window.VoxSpeiApp.selectedTasks.length === 0) {
+        showMessage('appMessage', 'Please select at least one task', 'error');
+        return;
+    }
+
+    saveSession();
+    showNotification(`${window.VoxSpeiApp.selectedTasks.length} tasks saved successfully!`);
+    showMessage('appMessage', `${window.VoxSpeiApp.selectedTasks.length} household tasks have been saved to your family profile.`, 'success');
+};
+
+// Children management
+window.addChild = function() {
+    const name = document.getElementById('childName').value.trim();
+    const pin = document.getElementById('childPin').value.trim();
+
+    if (!name) {
+        showMessage('appMessage', 'Please enter the child\'s name', 'error');
+        return;
+    }
+
+    if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+        showMessage('appMessage', 'Please enter a 4-digit PIN for the child', 'error');
+        return;
+    }
+
+    const existingChild = window.VoxSpeiApp.children.find(child => 
+        child.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (existingChild) {
+        showMessage('appMessage', 'A child with this name already exists in your family', 'error');
+        return;
+    }
+
+    const childData = {
+        id: `child_${window.VoxSpeiApp.currentUser.id}_${Date.now()}`,
+        name: name,
+        pin: pin,
+        parent_id: window.VoxSpeiApp.currentUser.id,
+        created_at: new Date().toISOString(),
+        tasks_assigned: 0,
+        tasks_completed: 0
+    };
+
+    window.VoxSpeiApp.children.push(childData);
+    
+    // Save child to global list for child login
+    const allChildren = JSON.parse(localStorage.getItem('voxspei_all_children') || '[]');
+    allChildren.push(childData);
+    localStorage.setItem('voxspei_all_children', JSON.stringify(allChildren));
+    
+    saveSession();
+
+    showNotification(`${name} added to your family!`);
+    showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
+    
+    document.getElementById('childName').value = '';
+    document.getElementById('childPin').value = '1234';
+    
+    loadChildren();
+};
+
+function loadChildren() {
+    const container = document.getElementById('childrenList');
+    
+    if (window.VoxSpeiApp.children.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No children added yet</h3>
+                <p>Add your first child to get started with family task management!</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="section-title">Your Family (${window.VoxSpeiApp.children.length})</div>
+        ${window.VoxSpeiApp.children.map(child => {
+            const childAssignments = window.VoxSpeiApp.assignments.filter(a => a.child_id === child.id);
+            const completedTasks = childAssignments.filter(a => a.status === 'approved').length;
+            const totalTasks = childAssignments.length;
+            const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
             
-            // Check for saved session
-            const savedToken = localStorage.getItem('voxspei_token');
-            const savedUser = localStorage.getItem('voxspei_user');
-            const savedChildren = localStorage.getItem('voxspei_children');
-            const savedTasks = localStorage.getItem('voxspei_tasks');
-            
-            if (savedToken && savedUser) {
-                try {
-                    authToken = savedToken;
-                    currentUser = JSON.parse(savedUser);
-                    children = savedChildren ? JSON.parse(savedChildren) : [];
-                    tasks = savedTasks ? JSON.parse(savedTasks) : [];
-                    showApp();
-                } catch (error) {
-                    clearSession();
-                }
-            }
-            
-            console.log('VoxSpei Family Tasks App Loaded!');
-        });
-
-        // Session persistence - FIXED to save children and tasks
-        function saveSession() {
-            if (authToken && currentUser) {
-                localStorage.setItem('voxspei_token', authToken);
-                localStorage.setItem('voxspei_user', JSON.stringify(currentUser));
-                localStorage.setItem('voxspei_children', JSON.stringify(children));
-                localStorage.setItem('voxspei_tasks', JSON.stringify(tasks));
-            }
-        }
-
-        function clearSession() {
-            localStorage.removeItem('voxspei_token');
-            localStorage.removeItem('voxspei_user');
-            localStorage.removeItem('voxspei_children');
-            localStorage.removeItem('voxspei_tasks');
-            children = [];
-            tasks = [];
-        }
-
-        function showNotification(message, type = 'success') {
-            const toast = document.getElementById('notificationToast');
-            toast.textContent = message;
-            toast.className = `notification-toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        function setButtonLoading(buttonId, loading = true) {
-            const btn = document.getElementById(buttonId);
-            if (!btn) return;
-            
-            if (loading) {
-                btn.classList.add('loading');
-                btn.disabled = true;
-                btn.dataset.originalText = btn.textContent;
-                btn.textContent = 'Please wait...';
-            } else {
-                btn.classList.remove('loading');
-                btn.disabled = false;
-                btn.textContent = btn.dataset.originalText || btn.textContent;
-            }
-        }
-
-        function switchTab(tabName) {
-            const authButtons = document.querySelectorAll('#authSection .tab-button');
-            const authContents = document.querySelectorAll('#authSection .tab-content');
-            
-            authButtons.forEach(btn => btn.classList.remove('active'));
-            authContents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
-        }
-
-        function switchAppTab(tabName) {
-            const appButtons = document.querySelectorAll('#appSection .tab-button');
-            const appContents = document.querySelectorAll('#appSection .tab-content');
-            
-            appButtons.forEach(btn => btn.classList.remove('active'));
-            appContents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            
-            // Hide child detail view when switching tabs
-            document.getElementById('childDetailView').classList.remove('active');
-            
-            if (tabName === 'dashboard') {
-                loadDashboard();
-            } else if (tabName === 'children') {
-                loadChildren();
-            } else if (tabName === 'tasks') {
-                loadTasks();
-                updateTaskChildSelect();
-            }
-        }
-
-        // Authentication
-        async function signup() {
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-
-            if (!name || !email || !password) {
-                showMessage('authMessage', 'Please fill in all fields', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                showMessage('authMessage', 'Password must be at least 6 characters long', 'error');
-                return;
-            }
-
-            setButtonLoading('signupBtn', true);
-
-            try {
-                const response = await fetch(`${API_URL}/auth/signup`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showNotification('Account created successfully!');
-                    showMessage('authMessage', 'Account created! Please login below.', 'success');
-                    switchTab('login');
-                    document.getElementById('loginEmail').value = email;
-                    
-                    // Clear signup form
-                    document.getElementById('signupName').value = '';
-                    document.getElementById('signupEmail').value = '';
-                    document.getElementById('signupPassword').value = '';
-                } else {
-                    showMessage('authMessage', data.error || 'Failed to create account', 'error');
-                }
-            } catch (error) {
-                showMessage('authMessage', 'Connection error. Please check your internet and try again.', 'error');
-            } finally {
-                setButtonLoading('signupBtn', false);
-            }
-        }
-
-        async function login() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                showMessage('authMessage', 'Please enter your email and password', 'error');
-                return;
-            }
-
-            setButtonLoading('loginBtn', true);
-
-            try {
-                const response = await fetch(`${API_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    currentUser = data.user;
-                    authToken = data.token;
-                    
-                    // Load existing children from backend after login
-                    await loadExistingChildren();
-                    await loadExistingTasks();
-                    
-                    saveSession();
-                    showNotification(`Welcome back, ${data.user.name}!`);
-                    showApp();
-                } else {
-                    showMessage('authMessage', data.error || 'Invalid login credentials', 'error');
-                }
-            } catch (error) {
-                showMessage('authMessage', 'Connection error. Please check your internet and try again.', 'error');
-            } finally {
-                setButtonLoading('loginBtn', false);
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            authToken = null;
-            children = [];
-            tasks = [];
-            clearSession();
-            
-            elements.authSection.classList.remove('hidden');
-            elements.appSection.classList.add('hidden');
-            document.getElementById('authMessage').innerHTML = '';
-            
-            showNotification('Logged out successfully', 'success');
-        }
-
-        function showApp() {
-            elements.authSection.classList.add('hidden');
-            elements.appSection.classList.remove('hidden');
-            elements.userName.textContent = currentUser.name;
-            elements.userRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
-
-            if (currentUser.role === 'parent') {
-                document.getElementById('parentView').classList.remove('hidden');
-                document.getElementById('childView').classList.add('hidden');
-                loadChildren();
-            } else {
-                document.getElementById('parentView').classList.add('hidden');
-                document.getElementById('childView').classList.remove('hidden');
-                loadChildTasks();
-                loadChildBalance();
-            }
-        }
-
-        // FIXED: Load existing children from backend
-        async function loadExistingChildren() {
-            try {
-                // Try to get existing children - we'll use a simple approach
-                // Since the backend doesn't have a specific children endpoint, 
-                // we'll maintain our local storage approach but make it persistent
-                const savedChildren = localStorage.getItem(`voxspei_children_${currentUser.id}`);
-                if (savedChildren) {
-                    children = JSON.parse(savedChildren);
-                }
-            } catch (error) {
-                console.log('No existing children found');
-                children = [];
-            }
-        }
-
-        async function loadExistingTasks() {
-            try {
-                const response = await fetch(`${API_URL}/tasks`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    tasks = data.tasks || [];
-                    localStorage.setItem(`voxspei_tasks_${currentUser.id}`, JSON.stringify(tasks));
-                }
-            } catch (error) {
-                console.log('Error loading existing tasks:', error);
-                tasks = [];
-            }
-        }
-
-        // FIXED: Add Child Function with better persistence
-        async function addChild() {
-            const name = document.getElementById('childName').value.trim();
-            const pin = document.getElementById('childPin').value.trim();
-
-            if (!name) {
-                showMessage('appMessage', 'Please enter the child\'s name', 'error');
-                return;
-            }
-
-            if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
-                showMessage('appMessage', 'Please enter a 4-digit PIN for the child', 'error');
-                return;
-            }
-
-            // Check if child already exists
-            const existingChild = children.find(child => 
-                child.name.toLowerCase() === name.toLowerCase()
-            );
-
-            if (existingChild) {
-                showMessage('appMessage', 'A child with this name already exists in your family', 'error');
-                return;
-            }
-
-            setButtonLoading('addChildBtn', true);
-
-            try {
-                const childData = {
-                    id: `child_${currentUser.id}_${Date.now()}`,
-                    name: name,
-                    pin: pin,
-                    parent_id: currentUser.id,
-                    created_at: new Date().toISOString(),
-                    tasks_assigned: 0,
-                    tasks_completed: 0
-                };
-
-                children.push(childData);
-                
-                // Save to user-specific storage
-                localStorage.setItem(`voxspei_children_${currentUser.id}`, JSON.stringify(children));
-                saveSession();
-
-                showNotification(`${name} added to your family!`);
-                showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
-                
-                // Clear form
-                document.getElementById('childName').value = '';
-                document.getElementById('childPin').value = '1234';
-                
-                updateChildrenDisplay();
-                updateTaskChildSelect();
-                
-            } catch (error) {
-                showMessage('appMessage', 'Error adding child. Please try again.', 'error');
-            } finally {
-                setButtonLoading('addChildBtn', false);
-            }
-        }
-
-        function loadChildren() {
-            updateChildrenDisplay();
-        }
-
-        function updateChildrenDisplay() {
-            const container = document.getElementById('childrenList');
-            
-            if (children.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No children added yet</h3>
-                        <p>Add your first child to get started with family task management!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="section-title">Your Family (${children.length})</div>
-                ${children.map(child => {
-                    const childTasks = tasks.filter(task => task.child_id === child.id);
-                    const completedTasks = childTasks.filter(task => task.status === 'approved').length;
-                    const totalTasks = childTasks.length;
-                    const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-                    
-                    return `
-                        <div class="child-item" onclick="showChildDetail('${child.id}')">
-                            <div class="task-title">${child.name}</div>
-                            <div class="task-description">Family member • Added ${new Date(child.created_at).toLocaleDateString()}</div>
-                            <div class="child-progress">
-                                <div>Tasks: ${completedTasks} of ${totalTasks} completed</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            `;
-        }
-
-        // NEW: Show child detail view
-        function showChildDetail(childId) {
-            selectedChildId = childId;
-            const child = children.find(c => c.id === childId);
-            if (!child) return;
-
-            const childTasks = tasks.filter(task => task.child_id === childId);
-            const completedTasks = childTasks.filter(task => task.status === 'approved').length;
-            const pendingTasks = childTasks.filter(task => task.status === 'assigned').length;
-            const totalRewards = childTasks
-                .filter(task => task.status === 'approved')
-                .reduce((sum, task) => sum + (task.value_amount || 0), 0);
-
-            document.getElementById('childDetailContent').innerHTML = `
-                <div class="section-title">${child.name}'s Profile</div>
-                
-                <div class="balance-card">
-                    <div class="balance-content">
-                        <div style="font-size: 20px; margin-bottom: 16px;">Progress Overview</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
-                            <div>
-                                <div style="opacity: 0.9;">Completed</div>
-                                <div style="font-size: 24px; font-weight: 700;">${completedTasks}</div>
-                            </div>
-                            <div>
-                                <div style="opacity: 0.9;">Pending</div>
-                                <div style="font-size: 24px; font-weight: 700;">${pendingTasks}</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
-                            <div style="opacity: 0.9; font-size: 14px;">Total Rewards Earned</div>
-                            <div style="font-size: 24px; font-weight: 700;">NGN${totalRewards}</div>
+            return `
+                <div class="task-item">
+                    <div class="task-title">${child.name}</div>
+                    <div class="task-description">PIN: ${child.pin} • Added ${new Date(child.created_at).toLocaleDateString()}</div>
+                    <div class="task-meta">
+                        <div>Tasks: ${completedTasks} of ${totalTasks} completed</div>
+                        <div style="width: 100%; height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin: 4px 0;">
+                            <div style="height: 100%; background: var(--success); width: ${progressPercent}%; transition: width 0.3s ease;"></div>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Assign New Task</label>
-                    <input type="text" id="quickTaskTitle" placeholder="Enter task title">
-                </div>
-                <div class="form-group">
-                    <label>Reward Amount (NGN)</label>
-                    <input type="number" id="quickTaskReward" placeholder="100" value="100">
-                </div>
-                <button class="btn" onclick="createQuickTask()">Assign Task to ${child.name}</button>
-
-                <div class="section-title">${child.name}'s Tasks</div>
-                <div id="childTasksList">
-                    ${childTasks.length === 0 ? 
-                        '<div class="empty-state"><h3>No tasks assigned yet</h3><p>Create tasks above to get started!</p></div>' :
-                        childTasks.map(task => `
-                            <div class="task-item">
-                                <div class="task-title">${task.title}</div>
-                                <div class="task-description">${task.description || 'No description'}</div>
-                                <div class="task-meta">
-                                    <div class="task-reward">NGN${task.value_amount}</div>
-                                    <div class="task-status status-${task.status}">${task.status}</div>
-                                </div>
-                            </div>
-                        `).join('')
-                    }
                 </div>
             `;
+        }).join('')}
+    `;
+}
 
-            // Show child detail view and hide children list
-            document.getElementById('childrenTab').classList.remove('active');
-            document.getElementById('childDetailView').classList.add('active');
-        }
+// Task assignments
+function loadAssignments() {
+    const container = document.getElementById('assignmentsList');
+    
+    if (window.VoxSpeiApp.children.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>Add children first</h3>
+                <p>Go to Setup tab to add children to your family before creating assignments.</p>
+            </div>
+        `;
+        return;
+    }
 
-        function showChildrenList() {
-            document.getElementById('childDetailView').classList.remove('active');
-            document.getElementById('childrenTab').classList.add('active');
-            selectedChildId = null;
-        }
+    if (window.VoxSpeiApp.selectedTasks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>Select tasks first</h3>
+                <p>Go to Setup tab to select household tasks before creating assignments.</p>
+            </div>
+        `;
+        return;
+    }
 
-        // NEW: Quick task creation from child detail
-        async function createQuickTask() {
-            const title = document.getElementById('quickTaskTitle').value.trim();
-            const reward = document.getElementById('quickTaskReward').value;
-
-            if (!title) {
-                showMessage('appMessage', 'Please enter a task title', 'error');
-                return;
-            }
-
-            if (!selectedChildId) {
-                showMessage('appMessage', 'No child selected', 'error');
-                return;
-            }
-
-            await createTaskForChild(selectedChildId, title, '', parseInt(reward) || 100, 'once');
-            
-            // Clear form and refresh view
-            document.getElementById('quickTaskTitle').value = '';
-            document.getElementById('quickTaskReward').value = '100';
-            showChildDetail(selectedChildId);
-        }
-
-        function updateTaskChildSelect() {
-            const select = document.getElementById('taskChildSelect');
-            select.innerHTML = '<option value="">Select a child...</option>';
-            
-            children.forEach(child => {
-                const option = document.createElement('option');
-                option.value = child.id;
-                option.textContent = child.name;
-                select.appendChild(option);
-            });
-        }
-
-        // FIXED: Create task function that works
-        async function createTask() {
-            const childId = document.getElementById('taskChildSelect').value;
-            const title = document.getElementById('taskTitle').value.trim();
-            const description = document.getElementById('taskDescription').value.trim();
-            const reward = document.getElementById('taskReward').value;
-            const frequency = document.getElementById('taskFrequency').value;
-
-            if (!childId) {
-                showMessage('appMessage', 'Please select a child first', 'error');
-                return;
-            }
-
-            if (!title) {
-                showMessage('appMessage', 'Please enter a task title', 'error');
-                return;
-            }
-
-            if (!reward || reward < 1) {
-                showMessage('appMessage', 'Please enter a valid reward amount', 'error');
-                return;
-            }
-
-            await createTaskForChild(childId, title, description, parseInt(reward), frequency);
-            
-            // Clear form
-            document.getElementById('taskChildSelect').value = '';
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDescription').value = '';
-            document.getElementById('taskReward').value = '100';
-            document.getElementById('taskFrequency').value = 'once';
-        }
-
-        // FIXED: Unified task creation function
-        async function createTaskForChild(childId, title, description, reward, frequency) {
-            setButtonLoading('createTaskBtn', true);
-
-            try {
-                const taskData = {
-                    id: `task_${currentUser.id}_${Date.now()}`,
-                    child_id: childId,
-                    parent_id: currentUser.id,
-                    title,
-                    description: description || 'No additional details',
-                    value_amount: reward,
-                    repeat: frequency,
-                    status: 'assigned',
-                    created_at: new Date().toISOString()
-                };
-
-                // Add to local tasks array
-                tasks.push(taskData);
-                
-                // Save to storage
-                localStorage.setItem(`voxspei_tasks_${currentUser.id}`, JSON.stringify(tasks));
-                saveSession();
-
-                const child = children.find(c => c.id === childId);
-                showNotification(`Task "${title}" assigned to ${child ? child.name : 'child'}!`);
-                showMessage('appMessage', `Task "${title}" created successfully!`, 'success');
-                
-                loadTasks();
-                updateChildrenDisplay();
-                
-            } catch (error) {
-                showMessage('appMessage', 'Error creating task. Please try again.', 'error');
-            } finally {
-                setButtonLoading('createTaskBtn', false);
-            }
-        }
-
-        async function loadTasks() {
-            displayTasks(tasks);
-        }
-
-        function displayTasks(taskList) {
-            const container = document.getElementById('tasksList');
-            
-            if (taskList.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No tasks created yet</h3>
-                        <p>Create your first task above to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="section-title">Recent Tasks (${taskList.length})</div>
-                ${taskList.map(task => {
-                    const child = children.find(c => c.id === task.child_id);
+    container.innerHTML = `
+        <div class="form-group">
+            <label>Select Child</label>
+            <select id="assignChild">
+                <option value="">Choose a child...</option>
+                ${window.VoxSpeiApp.children.map(child => `<option value="${child.id}">${child.name}</option>`).join('')}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Select Task</label>
+            <select id="assignTask">
+                <option value="">Choose a task...</option>
+                ${window.VoxSpeiApp.selectedTasks.map(task => `<option value="${task.id}">${task.title} (NGN${task.reward})</option>`).join('')}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Custom Reward (optional)</label>
+            <input type="number" id="customReward" placeholder="Leave empty to use default reward">
+        </div>
+        <button class="btn" onclick="window.createAssignment()" id="createAssignmentBtn">
+            Assign Task
+        </button>
+        
+        <div class="section-title">Current Assignments</div>
+        <div id="currentAssignments">
+            ${window.VoxSpeiApp.assignments.length === 0 ? 
+                '<div class="empty-state"><h3>No assignments yet</h3><p>Create your first task assignment above!</p></div>' :
+                window.VoxSpeiApp.assignments.map(assignment => {
+                    const child = window.VoxSpeiApp.children.find(c => c.id === assignment.child_id);
+                    const task = window.VoxSpeiApp.selectedTasks.find(t => t.id === assignment.task_id);
                     return `
                         <div class="task-item">
-                            <div class="task-title">${task.title}</div>
+                            <div class="task-title">${task ? task.title : 'Unknown Task'}</div>
                             <div class="task-description">Assigned to: ${child ? child.name : 'Unknown Child'}</div>
                             <div class="task-meta">
-                                <div class="task-reward">NGN${task.value_amount}</div>
-                                <div class="task-status status-${task.status}">${task.status}</div>
+                                <div class="task-reward">NGN${assignment.reward}</div>
+                                <div class="task-status status-${assignment.status}">${assignment.status}</div>
                             </div>
-                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-                                Created ${new Date(task.created_at).toLocaleDateString()}
-                            </div>
+                            ${assignment.status === 'completed' ? `
+                                <button class="btn" style="margin-top: 12px; font-size: 14px; padding: 12px;" onclick="window.approveTask('${assignment.id}')">
+                                    Approve & Pay Reward
+                                </button>
+                            ` : ''}
                         </div>
                     `;
-                }).join('')}
-            `;
-        }
-
-        async function loadDashboard() {
-            const summary = {
-                total_children: children.length,
-                total_tasks: tasks.length,
-                completed_tasks: tasks.filter(t => t.status === 'approved').length,
-                pending_tasks: tasks.filter(t => t.status === 'assigned').length,
-                total_rewards_distributed: tasks
-                    .filter(t => t.status === 'approved')
-                    .reduce((sum, t) => sum + (t.value_amount || 0), 0)
-            };
-            
-            displayDashboard({ summary });
-        }
-
-        function displayDashboard(dashboard) {
-            const summary = dashboard.summary || {};
-            
-            document.getElementById('dashboardContent').innerHTML = `
-                <div class="balance-card">
-                    <div class="balance-content">
-                        <div style="font-size: 20px; margin-bottom: 16px;">Family Overview</div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
-                            <div>
-                                <div style="opacity: 0.9;">Children</div>
-                                <div style="font-size: 24px; font-weight: 700;">${summary.total_children || 0}</div>
-                            </div>
-                            <div>
-                                <div style="opacity: 0.9;">Tasks</div>
-                                <div style="font-size: 24px; font-weight: 700;">${summary.total_tasks || 0}</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
-                            <div style="opacity: 0.9; font-size: 14px;">Total Rewards Given</div>
-                            <div style="font-size: 24px; font-weight: 700;">NGN${summary.total_rewards_distributed || 0}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #BAE6FD;">
-                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">Family Progress</h3>
-                    <div style="margin: 0; line-height: 1.8; color: var(--text-primary);">
-                        <div>✓ Completed Tasks: ${summary.completed_tasks || 0}</div>
-                        <div>⏳ Pending Tasks: ${summary.pending_tasks || 0}</div>
-                        <div>👨‍👩‍👧‍👦 Active Children: ${summary.total_children || 0}</div>
-                    </div>
-                </div>
-                
-                ${summary.total_children === 0 ? `
-                    <div style="background: #FEF3C7; padding: 16px; border-radius: 12px; margin-top: 16px; border: 1px solid #FCD34D;">
-                        <div style="color: #92400E; font-weight: 600; margin-bottom: 8px;">Add Your First Child</div>
-                        <div style="color: #92400E; font-size: 14px;">Go to the "Children" tab to add your first family member and start creating tasks!</div>
-                    </div>
-                ` : ''}
-            `;
-        }
-
-        // CHILD VIEW FUNCTIONS
-        async function loadChildTasks() {
-            // For child view, filter tasks assigned to current user
-            const childTasks = tasks.filter(task => task.child_id === currentUser.id);
-            displayChildTasks(childTasks);
-        }
-
-        function displayChildTasks(taskList) {
-            const container = document.getElementById('childTasks');
-            
-            if (taskList.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No tasks assigned yet</h3>
-                        <p>Your parents haven't created any tasks for you yet. Check back soon!</p>
-                    </div>
-                `;
-                return;
+                }).join('')
             }
+        </div>
+    `;
+}
 
-            container.innerHTML = taskList.map(task => `
-                <div class="task-item">
-                    <div class="task-title">${task.title}</div>
-                    <div class="task-description">${task.description || 'No additional details'}</div>
-                    <div class="task-meta">
-                        <div class="task-reward">NGN${task.value_amount}</div>
-                        <div class="task-status status-${task.status}">${task.status}</div>
+window.createAssignment = function() {
+    const childId = document.getElementById('assignChild').value;
+    const taskId = document.getElementById('assignTask').value;
+    const customReward = document.getElementById('customReward').value;
+
+    if (!childId) {
+        showMessage('appMessage', 'Please select a child', 'error');
+        return;
+    }
+
+    if (!taskId) {
+        showMessage('appMessage', 'Please select a task', 'error');
+        return;
+    }
+
+    const task = window.VoxSpeiApp.selectedTasks.find(t => t.id === taskId);
+    const child = window.VoxSpeiApp.children.find(c => c.id === childId);
+    
+    const assignment = {
+        id: `assignment_${Date.now()}`,
+        child_id: childId,
+        task_id: taskId,
+        reward: customReward ? parseInt(customReward) : task.reward,
+        status: 'assigned',
+        created_at: new Date().toISOString(),
+        month: getCurrentMonth()
+    };
+
+    window.VoxSpeiApp.assignments.push(assignment);
+    saveSession();
+
+    showNotification(`Task "${task.title}" assigned to ${child.name}!`);
+    loadAssignments();
+    
+    document.getElementById('assignChild').value = '';
+    document.getElementById('assignTask').value = '';
+    document.getElementById('customReward').value = '';
+};
+
+window.approveTask = function(assignmentId) {
+    const assignment = window.VoxSpeiApp.assignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+
+    assignment.status = 'approved';
+    assignment.approved_at = new Date().toISOString();
+
+    const child = window.VoxSpeiApp.children.find(c => c.id === assignment.child_id);
+    const task = window.VoxSpeiApp.selectedTasks.find(t => t.id === assignment.task_id);
+    
+    const reward = {
+        id: `reward_${Date.now()}`,
+        child_id: assignment.child_id,
+        amount: assignment.reward,
+        task_title: task ? task.title : 'Unknown Task',
+        earned_at: new Date().toISOString(),
+        month: getCurrentMonth(),
+        status: 'earned'
+    };
+
+    window.VoxSpeiApp.rewards.push(reward);
+    saveSession();
+
+    showNotification(`Task approved! ${child.name} earned NGN${assignment.reward}`);
+    loadAssignments();
+};
+
+// Child view functions
+function loadChildTasks() {
+    const childAssignments = window.VoxSpeiApp.assignments.filter(a => a.child_id === window.VoxSpeiApp.currentUser.id);
+    const container = document.getElementById('childTasks');
+    
+    if (childAssignments.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No tasks assigned yet</h3>
+                <p>Your parents haven't assigned any tasks to you yet. Check back soon!</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = childAssignments.map(assignment => {
+        const task = window.VoxSpeiApp.selectedTasks.find(t => t.id === assignment.task_id);
+        return `
+            <div class="task-item">
+                <div class="task-title">${task ? task.title : 'Unknown Task'}</div>
+                <div class="task-description">${task ? task.description : 'No description available'}</div>
+                <div class="task-meta">
+                    <div class="task-reward">NGN${assignment.reward}</div>
+                    <div class="task-status status-${assignment.status}">${assignment.status}</div>
+                </div>
+                ${assignment.status === 'assigned' ? `
+                    <button class="btn" style="margin-top: 12px; font-size: 14px; padding: 12px;" onclick="window.completeTask('${assignment.id}')">
+                        Mark Complete
+                    </button>
+                ` : assignment.status === 'completed' ? `
+                    <div style="margin-top: 12px; padding: 8px; background: #DBEAFE; border-radius: 8px; color: #1E40AF; font-size: 14px; text-align: center;">
+                        Waiting for parent approval
                     </div>
-                    ${task.status === 'assigned' ? `
-                        <button class="btn" style="margin-top: 12px; font-size: 14px; padding: 12px;" onclick="completeTask('${task.id}')">
-                            Mark Complete
-                        </button>
-                    ` : task.status === 'completed' ? `
-                        <div style="margin-top: 12px; padding: 8px; background: #DBEAFE; border-radius: 8px; color: #1E40AF; font-size: 14px; text-align: center;">
-                            Waiting for parent approval
-                        </div>
+                ` : `
+                    <div style="margin-top: 12px; padding: 8px; background: #D1FAE5; border-radius: 8px; color: #065F46; font-size: 14px; text-align: center;">
+                        Completed! Reward earned
+                    </div>
+                `}
+            </div>
+        `;
+    }).join('');
+}
+
+window.completeTask = function(assignmentId) {
+    const assignment = window.VoxSpeiApp.assignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+
+    assignment.status = 'completed';
+    assignment.completed_at = new Date().toISOString();
+    
+    saveSession();
+    
+    showNotification('Task marked as complete! Waiting for parent approval.');
+    loadChildTasks();
+};
+
+function loadChildBalance() {
+    const childRewards = window.VoxSpeiApp.rewards.filter(r => r.child_id === window.VoxSpeiApp.currentUser.id && r.status === 'earned');
+    const balance = childRewards.reduce((sum, reward) => sum + reward.amount, 0);
+    document.getElementById('childBalance').textContent = balance;
+}
+
+function loadChildRewards() {
+    const childRewards = window.VoxSpeiApp.rewards.filter(r => r.child_id === window.VoxSpeiApp.currentUser.id);
+    const container = document.getElementById('childRewards');
+    
+    if (childRewards.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No rewards earned yet</h3>
+                <p>Complete your assigned tasks to start earning rewards!</p>
+            </div>
+        `;
+        return;
+    }
+
+    const earnedRewards = childRewards.filter(r => r.status === 'earned');
+    const totalEarned = earnedRewards.reduce((sum, r) => sum + r.amount, 0);
+    const isLastDay = isLastDayOfMonth();
+
+    container.innerHTML = `
+        <div class="balance-card">
+            <div class="balance-content">
+                <div style="font-size: 20px; margin-bottom: 16px;">Rewards Summary</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                    <div>
+                        <div style="opacity: 0.9;">Available</div>
+                        <div style="font-size: 24px; font-weight: 700;">NGN${totalEarned}</div>
+                    </div>
+                    <div>
+                        <div style="opacity: 0.9;">Total Earned</div>
+                        <div style="font-size: 24px; font-weight: 700;">NGN${childRewards.reduce((sum, r) => sum + r.amount, 0)}</div>
+                    </div>
+                </div>
+                ${!isLastDay ? `
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 14px; opacity: 0.9;">
+                        Rewards can only be redeemed on the last day of each month
+                    </div>
+                ` : `
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 14px; opacity: 0.9;">
+                        Today is the last day of the month! You can redeem your rewards.
+                    </div>
+                `}
+            </div>
+        </div>
+
+        <div class="section-title">Reward History</div>
+        ${childRewards.map(reward => `
+            <div class="task-item" style="${reward.status === 'earned' && isLastDay ? 'border-color: var(--success); background: #F0FDF4;' : ''}${reward.status === 'redeemed' ? 'opacity: 0.6; background: #F1F5F9;' : ''}">
+                <div class="task-title">${reward.task_title}</div>
+                <div class="task-description">
+                    Earned ${new Date(reward.earned_at).toLocaleDateString()}
+                    ${reward.status === 'redeemed' ? ` • Redeemed ${new Date(reward.redeemed_at).toLocaleDateString()}` : ''}
+                </div>
+                <div class="task-meta">
+                    <div class="task-reward">NGN${reward.amount}</div>
+                    ${reward.status === 'earned' && isLastDay ? `
+                        <button class="btn" style="background: var(--success); padding: 8px 16px; font-size: 14px;" onclick="window.redeemReward('${reward.id}')">Redeem</button>
+                    ` : reward.status === 'redeemed' ? `
+                        <div style="font-size: 12px; color: var(--text-secondary);">Redeemed</div>
                     ` : `
-                        <div style="margin-top: 12px; padding: 8px; background: #D1FAE5; border-radius: 8px; color: #065F46; font-size: 14px; text-align: center;">
-                            Completed! Reward earned
-                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Available Month End</div>
                     `}
                 </div>
-            `).join('');
+            </div>
+        `).join('')}
+    `;
+}
+
+window.redeemReward = function(rewardId) {
+    const reward = window.VoxSpeiApp.rewards.find(r => r.id === rewardId);
+    if (!reward || reward.status !== 'earned') return;
+
+    reward.status = 'redeemed';
+    reward.redeemed_at = new Date().toISOString();
+    
+    saveSession();
+    
+    showNotification(`NGN${reward.amount} reward redeemed successfully!`);
+    loadChildRewards();
+    loadChildBalance();
+};
+
+// Dashboard
+function loadDashboard() {
+    const container = document.getElementById('dashboardContent');
+    const currentMonth = getCurrentMonth();
+    
+    const monthlyStats = window.VoxSpeiApp.children.map(child => {
+        const childAssignments = window.VoxSpeiApp.assignments.filter(a => 
+            a.child_id === child.id && a.month === currentMonth
+        );
+        const completedTasks = childAssignments.filter(a => a.status === 'approved').length;
+        const totalAssigned = childAssignments.length;
+        const earnedAmount = window.VoxSpeiApp.rewards
+            .filter(r => r.child_id === child.id && r.month === currentMonth)
+            .reduce((sum, r) => sum + r.amount, 0);
+
+        return {
+            child: child,
+            assigned: totalAssigned,
+            completed: completedTasks,
+            earned: earnedAmount,
+            completion_rate: totalAssigned > 0 ? Math.round((completedTasks / totalAssigned) * 100) : 0
+        };
+    });
+
+    const totalAssignments = window.VoxSpeiApp.assignments.filter(a => a.month === currentMonth).length;
+    const totalCompleted = window.VoxSpeiApp.assignments.filter(a => a.month === currentMonth && a.status === 'approved').length;
+    const totalRewardsDistributed = window.VoxSpeiApp.rewards
+        .filter(r => r.month === currentMonth)
+        .reduce((sum, r) => sum + r.amount, 0);
+
+    container.innerHTML = `
+        <div class="balance-card">
+            <div class="balance-content">
+                <div style="font-size: 20px; margin-bottom: 16px;">This Month's Overview</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                    <div>
+                        <div style="opacity: 0.9;">Total Tasks</div>
+                        <div style="font-size: 24px; font-weight: 700;">${totalAssignments}</div>
+                    </div>
+                    <div>
+                        <div style="opacity: 0.9;">Completed</div>
+                        <div style="font-size: 24px; font-weight: 700;">${totalCompleted}</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div style="opacity: 0.9; font-size: 14px;">Rewards Distributed</div>
+                    <div style="font-size: 24px; font-weight: 700;">NGN${totalRewardsDistributed}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">Monthly Performance Report</div>
+        ${monthlyStats.length === 0 ? 
+            '<div class="empty-state"><h3>No children added</h3><p>Add children in the Setup tab to see performance reports.</p></div>' :
+            monthlyStats.map(stat => `
+                <div class="task-item">
+                    <div class="task-title">${stat.child.name}</div>
+                    <div class="task-description">
+                        Assigned: ${stat.assigned} tasks • Completed: ${stat.completed} tasks • Earned: NGN${stat.earned}
+                    </div>
+                    <div class="task-meta">
+                        <div>Completion Rate: ${stat.completion_rate}%</div>
+                        <div style="width: 100%; height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin: 4px 0;">
+                            <div style="height: 100%; background: var(--success); width: ${stat.completion_rate}%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('')
         }
+        
+        ${window.VoxSpeiApp.children.length === 0 ? `
+            <div style="background: #FEF3C7; padding: 16px; border-radius: 12px; margin-top: 16px; border: 1px solid #FCD34D;">
+                <div style="color: #92400E; font-weight: 600; margin-bottom: 8px;">Get Started</div>
+                <div style="color: #92400E; font-size: 14px;">
+                    1. Add children to your family<br>
+                    2. Select household tasks<br>
+                    3. Create task assignments<br>
+                    4. Track progress here!
+                </div>
+            </div>
+        ` : ''}
+    `;
+}
 
-        // FIXED: Complete task function for children
-        function completeTask(taskId) {
-            const taskIndex = tasks.findIndex(t => t.id === taskId);
-            if (taskIndex === -1) return;
+// Initialize app on load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('VoxSpei Family Tasks App Loaded!');
+    loadDefaultTasks();
+    
+    // Check for saved session
+    const savedSession = JSON.parse(localStorage.getItem('voxspei_session') || '{}');
+    if (savedSession.user && savedSession.token) {
+        window.VoxSpeiApp.currentUser = savedSession.user;
+        window.VoxSpeiApp.authToken = savedSession.token;
+        window.VoxSpeiApp.children = savedSession.children || [];
+        window.VoxSpeiApp.selectedTasks = savedSession.selectedTasks || [];
+        window.VoxSpeiApp.assignments = savedSession.assignments || [];
+        window.VoxSpeiApp.rewards = savedSession.rewards || [];
+        showApp();
+    }
+});
 
-            // Update task status
-            tasks[taskIndex].status = 'completed';
-            tasks[taskIndex].completed_at = new Date().toISOString();
-            
-            // Save changes
-            localStorage.setItem(`voxspei_tasks_${currentUser.parent_id || currentUser.id}`, JSON.stringify(tasks));
-            saveSession();
-            
-            showNotification('Task marked as complete! Waiting for parent approval.');
-            loadChildTasks();
-        }
-
-        async function loadChildBalance() {
-            const childTasks = tasks.filter(task => 
-                task.child_id === currentUser.id && task.status === 'approved'
-            );
-            const balance = childTasks.reduce((sum, task) => sum + (task.value_amount || 0), 0);
-            elements.childBalance.textContent = balance;
-        }
-
-        // Utility Functions
-        function showMessage(elementId, message, type) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            
-            element.innerHTML = `<div class="alert ${type}">${message}</div>`;
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    element.innerHTML = '';
-                }, 5000);
-            }
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                if (document.activeElement.tagName === 'INPUT') {
-                    const form = document.activeElement.closest('#loginTab, #signupTab');
-                    if (form) {
-                        if (form.id === 'loginTab') {
-                            login();
-                        } else if (form.id === 'signupTab') {
-                            signup();
-                        }
-                    }
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        if (document.activeElement.tagName === 'INPUT') {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (activeTab) {
+                if (activeTab.id === 'loginTab') {
+                    window.login();
+                } else if (activeTab.id === 'signupSection') {
+                    window.signup();
+                } else if (activeTab.id === 'childTab') {
+                    window.childLogin();
                 }
             }
-        });
+        }
+    }
+});
     </script>
 </body>
 </html>
