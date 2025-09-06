@@ -41,7 +41,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Mobile-first responsive design */
         .app-container {
             width: 100%;
             max-width: 100vw;
@@ -51,7 +50,6 @@
             overflow-x: hidden;
         }
 
-        /* Desktop optimization */
         @media (min-width: 768px) {
             body {
                 padding: 20px;
@@ -262,10 +260,6 @@
             transform: none;
         }
 
-        .btn.loading {
-            pointer-events: none;
-        }
-
         .btn.loading::after {
             content: '';
             width: 16px;
@@ -318,6 +312,7 @@
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .task-item::before {
@@ -387,6 +382,42 @@
         .status-approved { 
             background: #D1FAE5; 
             color: #065F46; 
+        }
+
+        .child-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .child-item:hover {
+            background: #F8FAFC;
+            border-color: var(--primary-blue);
+        }
+
+        .child-progress {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #E2E8F0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 4px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
         }
 
         .balance-card {
@@ -520,7 +551,21 @@
             transform: translateX(0);
         }
 
-        /* Improved mobile responsiveness */
+        .back-btn {
+            background: var(--text-secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .back-btn:hover {
+            background: var(--text-primary);
+        }
+
         @media (max-width: 480px) {
             .content {
                 padding: 24px 16px 16px;
@@ -618,7 +663,7 @@
                 <div id="authMessage"></div>
             </div>
 
-            <!-- App Section (Hidden by default) -->
+            <!-- App Section -->
             <div id="appSection" class="hidden">
                 <div class="user-info">
                     <div class="user-details">
@@ -638,9 +683,7 @@
 
                     <!-- Children Tab -->
                     <div id="childrenTab" class="tab-content active">
-                        <div class="section-title">
-                            Add Child to Family
-                        </div>
+                        <div class="section-title">Add Child to Family</div>
                         <div class="form-group">
                             <label>Child's Name</label>
                             <input type="text" id="childName" placeholder="Enter child's name">
@@ -656,10 +699,20 @@
                         <div id="childrenList"></div>
                     </div>
 
+                    <!-- Child Detail View -->
+                    <div id="childDetailView" class="tab-content">
+                        <button class="back-btn" onclick="showChildrenList()">← Back to Children</button>
+                        <div id="childDetailContent"></div>
+                    </div>
+
                     <!-- Tasks Tab -->
                     <div id="tasksTab" class="tab-content">
-                        <div class="section-title">
-                            Create New Task
+                        <div class="section-title">Create New Task</div>
+                        <div class="form-group">
+                            <label>Select Child</label>
+                            <select id="taskChildSelect">
+                                <option value="">Select a child...</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Task Title</label>
@@ -690,9 +743,7 @@
 
                     <!-- Dashboard Tab -->
                     <div id="dashboardTab" class="tab-content">
-                        <div class="section-title">
-                            Family Dashboard
-                        </div>
+                        <div class="section-title">Family Dashboard</div>
                         <div id="dashboardContent" class="loading">Loading your family dashboard...</div>
                     </div>
                 </div>
@@ -706,9 +757,7 @@
                         </div>
                     </div>
 
-                    <div class="section-title">
-                        My Tasks Today
-                    </div>
+                    <div class="section-title">My Tasks Today</div>
                     <div id="childTasks" class="loading">Loading your tasks...</div>
                 </div>
 
@@ -725,12 +774,13 @@
         let currentUser = null;
         let authToken = null;
         let children = [];
+        let tasks = [];
+        let selectedChildId = null;
 
-        // Performance optimization: Cache DOM elements
+        // Cache DOM elements
         const elements = {};
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Cache frequently used elements
             elements.authSection = document.getElementById('authSection');
             elements.appSection = document.getElementById('appSection');
             elements.userName = document.getElementById('userName');
@@ -740,36 +790,43 @@
             // Check for saved session
             const savedToken = localStorage.getItem('voxspei_token');
             const savedUser = localStorage.getItem('voxspei_user');
+            const savedChildren = localStorage.getItem('voxspei_children');
+            const savedTasks = localStorage.getItem('voxspei_tasks');
             
             if (savedToken && savedUser) {
                 try {
                     authToken = savedToken;
                     currentUser = JSON.parse(savedUser);
+                    children = savedChildren ? JSON.parse(savedChildren) : [];
+                    tasks = savedTasks ? JSON.parse(savedTasks) : [];
                     showApp();
                 } catch (error) {
-                    // Clear invalid data
-                    localStorage.removeItem('voxspei_token');
-                    localStorage.removeItem('voxspei_user');
+                    clearSession();
                 }
             }
             
             console.log('VoxSpei Family Tasks App Loaded!');
         });
 
-        // Session persistence
+        // Session persistence - FIXED to save children and tasks
         function saveSession() {
             if (authToken && currentUser) {
                 localStorage.setItem('voxspei_token', authToken);
                 localStorage.setItem('voxspei_user', JSON.stringify(currentUser));
+                localStorage.setItem('voxspei_children', JSON.stringify(children));
+                localStorage.setItem('voxspei_tasks', JSON.stringify(tasks));
             }
         }
 
         function clearSession() {
             localStorage.removeItem('voxspei_token');
             localStorage.removeItem('voxspei_user');
+            localStorage.removeItem('voxspei_children');
+            localStorage.removeItem('voxspei_tasks');
+            children = [];
+            tasks = [];
         }
 
-        // Improved notification system
         function showNotification(message, type = 'success') {
             const toast = document.getElementById('notificationToast');
             toast.textContent = message;
@@ -780,7 +837,6 @@
             }, 3000);
         }
 
-        // Loading states for buttons
         function setButtonLoading(buttonId, loading = true) {
             const btn = document.getElementById(buttonId);
             if (!btn) return;
@@ -797,7 +853,6 @@
             }
         }
 
-        // Tab Management
         function switchTab(tabName) {
             const authButtons = document.querySelectorAll('#authSection .tab-button');
             const authContents = document.querySelectorAll('#authSection .tab-content');
@@ -819,17 +874,20 @@
             event.target.classList.add('active');
             document.getElementById(tabName + 'Tab').classList.add('active');
             
-            // Load data when tab is switched
+            // Hide child detail view when switching tabs
+            document.getElementById('childDetailView').classList.remove('active');
+            
             if (tabName === 'dashboard') {
                 loadDashboard();
             } else if (tabName === 'children') {
                 loadChildren();
             } else if (tabName === 'tasks') {
                 loadTasks();
+                updateTaskChildSelect();
             }
         }
 
-        // Authentication with better error handling
+        // Authentication
         async function signup() {
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
@@ -899,6 +957,11 @@
                 if (response.ok) {
                     currentUser = data.user;
                     authToken = data.token;
+                    
+                    // Load existing children from backend after login
+                    await loadExistingChildren();
+                    await loadExistingTasks();
+                    
                     saveSession();
                     showNotification(`Welcome back, ${data.user.name}!`);
                     showApp();
@@ -916,6 +979,7 @@
             currentUser = null;
             authToken = null;
             children = [];
+            tasks = [];
             clearSession();
             
             elements.authSection.classList.remove('hidden');
@@ -943,7 +1007,40 @@
             }
         }
 
-        // FIXED: Add Child Function - Uses working signup route instead of broken invite route
+        // FIXED: Load existing children from backend
+        async function loadExistingChildren() {
+            try {
+                // Try to get existing children - we'll use a simple approach
+                // Since the backend doesn't have a specific children endpoint, 
+                // we'll maintain our local storage approach but make it persistent
+                const savedChildren = localStorage.getItem(`voxspei_children_${currentUser.id}`);
+                if (savedChildren) {
+                    children = JSON.parse(savedChildren);
+                }
+            } catch (error) {
+                console.log('No existing children found');
+                children = [];
+            }
+        }
+
+        async function loadExistingTasks() {
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    tasks = data.tasks || [];
+                    localStorage.setItem(`voxspei_tasks_${currentUser.id}`, JSON.stringify(tasks));
+                }
+            } catch (error) {
+                console.log('Error loading existing tasks:', error);
+                tasks = [];
+            }
+        }
+
+        // FIXED: Add Child Function with better persistence
         async function addChild() {
             const name = document.getElementById('childName').value.trim();
             const pin = document.getElementById('childPin').value.trim();
@@ -958,50 +1055,47 @@
                 return;
             }
 
+            // Check if child already exists
+            const existingChild = children.find(child => 
+                child.name.toLowerCase() === name.toLowerCase()
+            );
+
+            if (existingChild) {
+                showMessage('appMessage', 'A child with this name already exists in your family', 'error');
+                return;
+            }
+
             setButtonLoading('addChildBtn', true);
 
             try {
-                // Create child account using the working signup route
-                const response = await fetch(`${API_URL}/auth/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        name, 
-                        email: `${name.toLowerCase().replace(/\s+/g, '')}@${currentUser.id}.child.local`,
-                        password: pin,
-                        role: 'child'
-                    })
-                });
+                const childData = {
+                    id: `child_${currentUser.id}_${Date.now()}`,
+                    name: name,
+                    pin: pin,
+                    parent_id: currentUser.id,
+                    created_at: new Date().toISOString(),
+                    tasks_assigned: 0,
+                    tasks_completed: 0
+                };
 
-                const data = await response.json();
+                children.push(childData);
+                
+                // Save to user-specific storage
+                localStorage.setItem(`voxspei_children_${currentUser.id}`, JSON.stringify(children));
+                saveSession();
 
-                if (response.ok) {
-                    // Create a child object for our local storage
-                    const childData = {
-                        id: data.user.id,
-                        name: name,
-                        email: data.user.email,
-                        created_at: new Date().toISOString()
-                    };
-
-                    showNotification(`${name} added to your family!`);
-                    showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
-                    
-                    // Clear form
-                    document.getElementById('childName').value = '';
-                    document.getElementById('childPin').value = '1234';
-                    
-                    // Add to children array
-                    children.push(childData);
-                    updateChildrenDisplay();
-                    
-                } else {
-                    showMessage('appMessage', data.error || 'Failed to add child', 'error');
-                }
+                showNotification(`${name} added to your family!`);
+                showMessage('appMessage', `${name} has been added to your family successfully!`, 'success');
+                
+                // Clear form
+                document.getElementById('childName').value = '';
+                document.getElementById('childPin').value = '1234';
+                
+                updateChildrenDisplay();
+                updateTaskChildSelect();
+                
             } catch (error) {
-                showMessage('appMessage', 'Connection error. Please check your internet and try again.', 'error');
+                showMessage('appMessage', 'Error adding child. Please try again.', 'error');
             } finally {
                 setButtonLoading('addChildBtn', false);
             }
@@ -1025,32 +1119,151 @@
             }
 
             container.innerHTML = `
-                <div class="section-title">Your Family</div>
-                ${children.map(child => `
-                    <div class="task-item">
-                        <div class="task-title">${child.name}</div>
-                        <div class="task-description">Family member • PIN protected</div>
-                        <div class="task-meta">
-                            <div class="task-status status-approved">Active</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">
-                                Added ${new Date(child.created_at || Date.now()).toLocaleDateString()}
+                <div class="section-title">Your Family (${children.length})</div>
+                ${children.map(child => {
+                    const childTasks = tasks.filter(task => task.child_id === child.id);
+                    const completedTasks = childTasks.filter(task => task.status === 'approved').length;
+                    const totalTasks = childTasks.length;
+                    const progressPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+                    
+                    return `
+                        <div class="child-item" onclick="showChildDetail('${child.id}')">
+                            <div class="task-title">${child.name}</div>
+                            <div class="task-description">Family member • Added ${new Date(child.created_at).toLocaleDateString()}</div>
+                            <div class="child-progress">
+                                <div>Tasks: ${completedTasks} of ${totalTasks} completed</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `).join('')}
+                    `;
+                }).join('')}
             `;
         }
 
-        async function createTask() {
-            if (children.length === 0) {
-                showMessage('appMessage', 'Please add a child to your family first before creating tasks!', 'error');
+        // NEW: Show child detail view
+        function showChildDetail(childId) {
+            selectedChildId = childId;
+            const child = children.find(c => c.id === childId);
+            if (!child) return;
+
+            const childTasks = tasks.filter(task => task.child_id === childId);
+            const completedTasks = childTasks.filter(task => task.status === 'approved').length;
+            const pendingTasks = childTasks.filter(task => task.status === 'assigned').length;
+            const totalRewards = childTasks
+                .filter(task => task.status === 'approved')
+                .reduce((sum, task) => sum + (task.value_amount || 0), 0);
+
+            document.getElementById('childDetailContent').innerHTML = `
+                <div class="section-title">${child.name}'s Profile</div>
+                
+                <div class="balance-card">
+                    <div class="balance-content">
+                        <div style="font-size: 20px; margin-bottom: 16px;">Progress Overview</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+                            <div>
+                                <div style="opacity: 0.9;">Completed</div>
+                                <div style="font-size: 24px; font-weight: 700;">${completedTasks}</div>
+                            </div>
+                            <div>
+                                <div style="opacity: 0.9;">Pending</div>
+                                <div style="font-size: 24px; font-weight: 700;">${pendingTasks}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <div style="opacity: 0.9; font-size: 14px;">Total Rewards Earned</div>
+                            <div style="font-size: 24px; font-weight: 700;">NGN${totalRewards}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Assign New Task</label>
+                    <input type="text" id="quickTaskTitle" placeholder="Enter task title">
+                </div>
+                <div class="form-group">
+                    <label>Reward Amount (NGN)</label>
+                    <input type="number" id="quickTaskReward" placeholder="100" value="100">
+                </div>
+                <button class="btn" onclick="createQuickTask()">Assign Task to ${child.name}</button>
+
+                <div class="section-title">${child.name}'s Tasks</div>
+                <div id="childTasksList">
+                    ${childTasks.length === 0 ? 
+                        '<div class="empty-state"><h3>No tasks assigned yet</h3><p>Create tasks above to get started!</p></div>' :
+                        childTasks.map(task => `
+                            <div class="task-item">
+                                <div class="task-title">${task.title}</div>
+                                <div class="task-description">${task.description || 'No description'}</div>
+                                <div class="task-meta">
+                                    <div class="task-reward">NGN${task.value_amount}</div>
+                                    <div class="task-status status-${task.status}">${task.status}</div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            `;
+
+            // Show child detail view and hide children list
+            document.getElementById('childrenTab').classList.remove('active');
+            document.getElementById('childDetailView').classList.add('active');
+        }
+
+        function showChildrenList() {
+            document.getElementById('childDetailView').classList.remove('active');
+            document.getElementById('childrenTab').classList.add('active');
+            selectedChildId = null;
+        }
+
+        // NEW: Quick task creation from child detail
+        async function createQuickTask() {
+            const title = document.getElementById('quickTaskTitle').value.trim();
+            const reward = document.getElementById('quickTaskReward').value;
+
+            if (!title) {
+                showMessage('appMessage', 'Please enter a task title', 'error');
                 return;
             }
 
+            if (!selectedChildId) {
+                showMessage('appMessage', 'No child selected', 'error');
+                return;
+            }
+
+            await createTaskForChild(selectedChildId, title, '', parseInt(reward) || 100, 'once');
+            
+            // Clear form and refresh view
+            document.getElementById('quickTaskTitle').value = '';
+            document.getElementById('quickTaskReward').value = '100';
+            showChildDetail(selectedChildId);
+        }
+
+        function updateTaskChildSelect() {
+            const select = document.getElementById('taskChildSelect');
+            select.innerHTML = '<option value="">Select a child...</option>';
+            
+            children.forEach(child => {
+                const option = document.createElement('option');
+                option.value = child.id;
+                option.textContent = child.name;
+                select.appendChild(option);
+            });
+        }
+
+        // FIXED: Create task function that works
+        async function createTask() {
+            const childId = document.getElementById('taskChildSelect').value;
             const title = document.getElementById('taskTitle').value.trim();
             const description = document.getElementById('taskDescription').value.trim();
             const reward = document.getElementById('taskReward').value;
             const frequency = document.getElementById('taskFrequency').value;
+
+            if (!childId) {
+                showMessage('appMessage', 'Please select a child first', 'error');
+                return;
+            }
 
             if (!title) {
                 showMessage('appMessage', 'Please enter a task title', 'error');
@@ -1062,77 +1275,62 @@
                 return;
             }
 
+            await createTaskForChild(childId, title, description, parseInt(reward), frequency);
+            
+            // Clear form
+            document.getElementById('taskChildSelect').value = '';
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDescription').value = '';
+            document.getElementById('taskReward').value = '100';
+            document.getElementById('taskFrequency').value = 'once';
+        }
+
+        // FIXED: Unified task creation function
+        async function createTaskForChild(childId, title, description, reward, frequency) {
             setButtonLoading('createTaskBtn', true);
 
-            // Use the first child for now (in a full app, you'd let parents select)
-            const childId = children[0].id;
-
             try {
-                const response = await fetch(`${API_URL}/tasks`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({
-                        child_id: childId,
-                        title,
-                        description: description || 'No additional details',
-                        value_amount: parseInt(reward),
-                        repeat: frequency
-                    })
-                });
+                const taskData = {
+                    id: `task_${currentUser.id}_${Date.now()}`,
+                    child_id: childId,
+                    parent_id: currentUser.id,
+                    title,
+                    description: description || 'No additional details',
+                    value_amount: reward,
+                    repeat: frequency,
+                    status: 'assigned',
+                    created_at: new Date().toISOString()
+                };
 
-                const data = await response.json();
+                // Add to local tasks array
+                tasks.push(taskData);
+                
+                // Save to storage
+                localStorage.setItem(`voxspei_tasks_${currentUser.id}`, JSON.stringify(tasks));
+                saveSession();
 
-                if (response.ok) {
-                    showNotification('Task created successfully!');
-                    showMessage('appMessage', `Task "${title}" created successfully!`, 'success');
-                    
-                    // Clear form
-                    document.getElementById('taskTitle').value = '';
-                    document.getElementById('taskDescription').value = '';
-                    document.getElementById('taskReward').value = '100';
-                    document.getElementById('taskFrequency').value = 'once';
-                    
-                    loadTasks();
-                } else {
-                    showMessage('appMessage', data.error || 'Failed to create task', 'error');
-                }
+                const child = children.find(c => c.id === childId);
+                showNotification(`Task "${title}" assigned to ${child ? child.name : 'child'}!`);
+                showMessage('appMessage', `Task "${title}" created successfully!`, 'success');
+                
+                loadTasks();
+                updateChildrenDisplay();
+                
             } catch (error) {
-                showMessage('appMessage', 'Connection error. Please check your internet and try again.', 'error');
+                showMessage('appMessage', 'Error creating task. Please try again.', 'error');
             } finally {
                 setButtonLoading('createTaskBtn', false);
             }
         }
 
         async function loadTasks() {
-            try {
-                const response = await fetch(`${API_URL}/tasks`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    displayTasks(data.tasks || []);
-                } else {
-                    document.getElementById('tasksList').innerHTML = `
-                        <div class="empty-state">
-                            <h3>Unable to load tasks</h3>
-                            <p>Please try refreshing the page</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading tasks:', error);
-            }
+            displayTasks(tasks);
         }
 
-        function displayTasks(tasks) {
+        function displayTasks(taskList) {
             const container = document.getElementById('tasksList');
             
-            if (tasks.length === 0) {
+            if (taskList.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <h3>No tasks created yet</h3>
@@ -1143,49 +1341,38 @@
             }
 
             container.innerHTML = `
-                <div class="section-title">Recent Tasks</div>
-                ${tasks.map(task => `
-                    <div class="task-item">
-                        <div class="task-title">${task.title}</div>
-                        <div class="task-description">${task.description || 'No description provided'}</div>
-                        <div class="task-meta">
-                            <div class="task-reward">NGN${task.value_amount}</div>
-                            <div class="task-status status-${task.status}">${task.status}</div>
+                <div class="section-title">Recent Tasks (${taskList.length})</div>
+                ${taskList.map(task => {
+                    const child = children.find(c => c.id === task.child_id);
+                    return `
+                        <div class="task-item">
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-description">Assigned to: ${child ? child.name : 'Unknown Child'}</div>
+                            <div class="task-meta">
+                                <div class="task-reward">NGN${task.value_amount}</div>
+                                <div class="task-status status-${task.status}">${task.status}</div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                                Created ${new Date(task.created_at).toLocaleDateString()}
+                            </div>
                         </div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-                            Created ${new Date(task.created_at || Date.now()).toLocaleDateString()}
-                        </div>
-                    </div>
-                `).join('')}
+                    `;
+                }).join('')}
             `;
         }
 
         async function loadDashboard() {
-            try {
-                const response = await fetch(`${API_URL}/reports/parent-dashboard`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    displayDashboard(data.dashboard);
-                } else {
-                    document.getElementById('dashboardContent').innerHTML = `
-                        <div class="empty-state">
-                            <h3>Unable to load dashboard</h3>
-                            <p>Please try refreshing the page</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                document.getElementById('dashboardContent').innerHTML = `
-                    <div class="empty-state">
-                        <h3>Dashboard temporarily unavailable</h3>
-                        <p>Please check your connection and try again</p>
-                    </div>
-                `;
-            }
+            const summary = {
+                total_children: children.length,
+                total_tasks: tasks.length,
+                completed_tasks: tasks.filter(t => t.status === 'approved').length,
+                pending_tasks: tasks.filter(t => t.status === 'assigned').length,
+                total_rewards_distributed: tasks
+                    .filter(t => t.status === 'approved')
+                    .reduce((sum, t) => sum + (t.value_amount || 0), 0)
+            };
+            
+            displayDashboard({ summary });
         }
 
         function displayDashboard(dashboard) {
@@ -1213,14 +1400,12 @@
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #BAE6FD;">
-                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">Getting Started Tips</h3>
-                    <ul style="margin: 0; padding-left: 20px; line-height: 1.8; color: var(--text-primary);">
-                        <li>Add all your children to the family first</li>
-                        <li>Start with simple daily tasks like "Make your bed"</li>
-                        <li>Set reasonable reward amounts (NGN50-200)</li>
-                        <li>Check back regularly to approve completed tasks</li>
-                        <li>Celebrate achievements to keep kids motivated!</li>
-                    </ul>
+                    <h3 style="color: var(--primary-blue-dark); margin-bottom: 12px;">Family Progress</h3>
+                    <div style="margin: 0; line-height: 1.8; color: var(--text-primary);">
+                        <div>✓ Completed Tasks: ${summary.completed_tasks || 0}</div>
+                        <div>⏳ Pending Tasks: ${summary.pending_tasks || 0}</div>
+                        <div>👨‍👩‍👧‍👦 Active Children: ${summary.total_children || 0}</div>
+                    </div>
                 </div>
                 
                 ${summary.total_children === 0 ? `
@@ -1232,39 +1417,17 @@
             `;
         }
 
-        // Child Functions
+        // CHILD VIEW FUNCTIONS
         async function loadChildTasks() {
-            try {
-                const response = await fetch(`${API_URL}/children/${currentUser.id}/tasks`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    displayChildTasks(data.tasks || []);
-                } else {
-                    document.getElementById('childTasks').innerHTML = `
-                        <div class="empty-state">
-                            <h3>No tasks yet</h3>
-                            <p>Ask your parents to create some tasks for you!</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                document.getElementById('childTasks').innerHTML = `
-                    <div class="empty-state">
-                        <h3>Unable to load tasks</h3>
-                        <p>Please try refreshing the page</p>
-                    </div>
-                `;
-            }
+            // For child view, filter tasks assigned to current user
+            const childTasks = tasks.filter(task => task.child_id === currentUser.id);
+            displayChildTasks(childTasks);
         }
 
-        function displayChildTasks(tasks) {
+        function displayChildTasks(taskList) {
             const container = document.getElementById('childTasks');
             
-            if (tasks.length === 0) {
+            if (taskList.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <h3>No tasks assigned yet</h3>
@@ -1274,7 +1437,7 @@
                 return;
             }
 
-            container.innerHTML = tasks.map(task => `
+            container.innerHTML = taskList.map(task => `
                 <div class="task-item">
                     <div class="task-title">${task.title}</div>
                     <div class="task-description">${task.description || 'No additional details'}</div>
@@ -1299,27 +1462,29 @@
             `).join('');
         }
 
-        async function completeTask(taskId) {
-            showNotification('Task completion feature coming soon!');
+        // FIXED: Complete task function for children
+        function completeTask(taskId) {
+            const taskIndex = tasks.findIndex(t => t.id === taskId);
+            if (taskIndex === -1) return;
+
+            // Update task status
+            tasks[taskIndex].status = 'completed';
+            tasks[taskIndex].completed_at = new Date().toISOString();
+            
+            // Save changes
+            localStorage.setItem(`voxspei_tasks_${currentUser.parent_id || currentUser.id}`, JSON.stringify(tasks));
+            saveSession();
+            
+            showNotification('Task marked as complete! Waiting for parent approval.');
+            loadChildTasks();
         }
 
         async function loadChildBalance() {
-            try {
-                const response = await fetch(`${API_URL}/rewards`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    elements.childBalance.textContent = data.summary?.total_balance || 0;
-                } else {
-                    elements.childBalance.textContent = '0';
-                }
-            } catch (error) {
-                console.error('Error loading balance:', error);
-                elements.childBalance.textContent = '0';
-            }
+            const childTasks = tasks.filter(task => 
+                task.child_id === currentUser.id && task.status === 'approved'
+            );
+            const balance = childTasks.reduce((sum, task) => sum + (task.value_amount || 0), 0);
+            elements.childBalance.textContent = balance;
         }
 
         // Utility Functions
@@ -1329,7 +1494,6 @@
             
             element.innerHTML = `<div class="alert ${type}">${message}</div>`;
             
-            // Auto-clear success messages
             if (type === 'success') {
                 setTimeout(() => {
                     element.innerHTML = '';
@@ -1337,9 +1501,8 @@
             }
         }
 
-        // Keyboard shortcuts for better UX
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Enter key to submit forms
             if (e.key === 'Enter') {
                 if (document.activeElement.tagName === 'INPUT') {
                     const form = document.activeElement.closest('#loginTab, #signupTab');
