@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 VoxSpei Family Tasks - Live App Tester</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin: 15px 0; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        input, button, select { 
+            padding: 12px; 
+            margin: 8px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 14px;
+        }
+        input { width: 250px; }
+        button { 
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white; 
+            cursor: pointer; 
+            border: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .success { 
+            color: #27ae60; 
+            background: #d5f4e6; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+        }
+        .error { 
+            color: #e74c3c; 
+            background: #fdf2f2; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #4ECDC4;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1;
+            padding: 15px; 
+            border-radius: 8px; 
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .online { background: #d5f4e6; color: #27ae60; }
+        .testing { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏠 VoxSpei Family Tasks & Rewards</h1>
+        <p>Live App Tester - Your app is now on the internet!</p>
+        <div class="status-badge online">🌐 LIVE & WORKING</div>
+    </div>
+
+    <div class="container">
+        <h3>🔗 Your Live App URL</h3>
+        <div class="step">
+            <strong>App URL:</strong> 
+            <code id="appUrl">https://voxspei-family-tasks.onrender.com</code>
+            <button onclick="testConnection()" style="margin-left: 10px;">🧪 Test Connection</button>
+        </div>
+        <div id="connectionStatus"></div>
+    </div>
+
+    <div class="container">
+        <h3>👨‍👩‍👧‍👦 Step 1: Create Parent Account</h3>
+        <div class="step">
+            Create your family's main account:
+        </div>
+        <input type="email" id="parentEmail" placeholder="Your Email (e.g., parent@family.com)">
+        <input type="password" id="parentPassword" placeholder="Create a Password">
+        <input type="text" id="parentName" placeholder="Your Name">
+        <br>
+        <button onclick="createParent()">🚀 Create Parent Account</button>
+        <div id="parentResult"></div>
+    </div>
+
+    <div class="container">
+        <h3>🔑 Step 2: Login</h3>
+        <div class="step">
+            Login with the account you just created:
+        </div>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <br>
+        <button onclick="login()">🔓 Login</button>
+        <div id="loginResult"></div>
+    </div>
+
+    <div class="container">
+        <h3>👶 Step 3: Add Your First Child</h3>
+        <div class="step">
+            Add a child to your family:
+        </div>
+        <input type="text" id="childName" placeholder="Child's Name (e.g., Sarah)">
+        <input type="text" id="childPin" placeholder="Child PIN (e.g., 1234)" value="1234">
+        <br>
+        <button onclick="createChild()">👶 Add Child</button>
+        <div id="childResult"></div>
+    </div>
+
+    <div class="container">
+        <h3>📋 Step 4: Create Your First Task</h3>
+        <div class="step">
+            Create a task for your child:
+        </div>
+        <input type="text" id="taskTitle" placeholder="Task (e.g., Clean your room)" value="Make your bed">
+        <input type="text" id="taskDescription" placeholder="Description" value="Tidy up and organize">
+        <input type="number" id="taskValue" placeholder="Reward Amount" value="100">
+        <select id="taskRepeat">
+            <option value="once">One Time Task</option>
+            <option value="daily">Daily Task</option>
+            <option value="weekly">Weekly Task</option>
+        </select>
+        <br>
+        <button onclick="createTask()">📋 Create Task</button>
+        <div id="taskResult"></div>
+    </div>
+
+    <div class="container">
+        <h3>📊 Step 5: View Family Dashboard</h3>
+        <div class="step">
+            See your family's overview:
+        </div>
+        <button onclick="getDashboard()">📊 Load Dashboard</button>
+        <div id="dashboardResult"></div>
+    </div>
+
+    <div class="container">
+        <h3>🎉 Congratulations!</h3>
+        <div class="step">
+            <strong>You just built and deployed a real web application!</strong><br>
+            • Your app is live on the internet 🌐<br>
+            • Families can create accounts and manage tasks 👨‍👩‍👧‍👦<br>
+            • It has a secure database and authentication 🔒<br>
+            • You can share this URL with friends and family! 📱
+        </div>
+        
+        <h4>🚀 What's Next?</h4>
+        <ul>
+            <li>Share your app with friends and family to test</li>
+            <li>Add more features like photo uploads</li>
+            <li>Build a mobile app that connects to this API</li>
+            <li>Maybe start a business helping other families! 💰</li>
+        </ul>
+    </div>
+
+    <script>
+        const API_URL = 'https://voxspei-family-tasks.onrender.com';
+        let authToken = '';
+        let parentId = '';
+        let childId = '';
+
+        async function testConnection() {
+            try {
+                document.getElementById('connectionStatus').innerHTML = 
+                    '<div class="testing">🔄 Testing connection...</div>';
+                
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                
+                document.getElementById('connectionStatus').innerHTML = 
+                    `<div class="success">✅ CONNECTED! Your app is live and healthy!<br>
+                     Status: ${data.status}<br>
+                     Service: ${data.service}</div>`;
+            } catch (error) {
+                document.getElementById('connectionStatus').innerHTML = 
+                    `<div class="error">❌ Connection failed: ${error.message}<br>
+                     Your app might still be starting up. Wait 30 seconds and try again.</div>`;
+            }
+        }
+
+        async function createParent() {
+            const data = {
+                email: document.getElementById('parentEmail').value,
+                password: document.getElementById('parentPassword').value,
+                name: document.getElementById('parentName').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    authToken = result.token;
+                    parentId = result.user.id;
+                    document.getElementById('parentResult').innerHTML = 
+                        `<div class="success">🎉 SUCCESS! Parent account created!<br>
+                         Welcome ${result.user.name}!<br>
+                         Parent ID: ${parentId}</div>`;
+                    
+                    // Auto-fill login fields
+                    document.getElementById('loginEmail').value = data.email;
+                    document.getElementById('loginPassword').value = data.password;
+                } else {
+                    document.getElementById('parentResult').innerHTML = 
+                        `<div class="error">❌ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('parentResult').innerHTML = 
+                    `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        async function login() {
+            const data = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    authToken = result.token;
+                    parentId = result.user.id;
+                    document.getElementById('loginResult').innerHTML = 
+                        `<div class="success">🔓 LOGIN SUCCESS!<br>
+                         Welcome back ${result.user.name}!<br>
+                         You can now add children and create tasks!</div>`;
+                } else {
+                    document.getElementById('loginResult').innerHTML = 
+                        `<div class="error">❌ Login failed: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = 
+                    `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        async function createChild() {
+            if (!authToken) {
+                alert('⚠️ Please login first!');
+                return;
+            }
+
+            const data = {
+                name: document.getElementById('childName').value,
+                pin: document.getElementById('childPin').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/parents/${parentId}/invite-child`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    childId = result.child.id;
+                    document.getElementById('childResult').innerHTML = 
+                        `<div class="success">👶 CHILD ADDED!<br>
+                         ${result.child.name} has been added to your family!<br>
+                         Child ID: ${childId}</div>`;
+                } else {
+                    document.getElementById('childResult').innerHTML = 
+                        `<div class="error">❌ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('childResult').innerHTML = 
+                    `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        async function createTask() {
+            if (!authToken || !childId) {
+                alert('⚠️ Please login and add a child first!');
+                return;
+            }
+
+            const data = {
+                child_id: childId,
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value,
+                value_amount: parseInt(document.getElementById('taskValue').value) || 100,
+                repeat: document.getElementById('taskRepeat').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('taskResult').innerHTML = 
+                        `<div class="success">📋 TASK CREATED!<br>
+                         "${result.task.title}" worth ₦${result.task.value_amount}<br>
+                         Task ID: ${result.task.id}</div>`;
+                } else {
+                    document.getElementById('taskResult').innerHTML = 
+                        `<div class="error">❌ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('taskResult').innerHTML = 
+                    `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        async function getDashboard() {
+            if (!authToken) {
+                alert('⚠️ Please login first!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/reports/parent-dashboard`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('dashboardResult').innerHTML = 
+                        `<div class="success">📊 DASHBOARD LOADED!<br>
+                         Your family dashboard is working!</div>
+                         <pre>${JSON.stringify(result, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('dashboardResult').innerHTML = 
+                        `<div class="error">❌ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('dashboardResult').innerHTML = 
+                    `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-test connection when page loads
+        window.onload = function() {
+            testConnection();
+        };
+    </script>
+</body>
+</html>
